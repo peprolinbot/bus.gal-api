@@ -2,7 +2,8 @@ from setuptools import setup, find_packages
 
 VERSION = '0.0.1' 
 DESCRIPTION = 'Python API wrapper for bus.gal'
-LONG_DESCRIPTION = 'Python API wrapper for bus.gal which uses both Selenium with Beautiful Soup and normal http requests to get the inforamtion'
+with open("README.md", "r", encoding="utf-8") as fh:
+    LONG_DESCRIPTION = fh.read()
 
 setup(
         name="bus.gal-api", 
