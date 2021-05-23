@@ -14,8 +14,11 @@ setup(
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
         install_requires=[],
-        
-        keywords=['python', 'first package'],
+        url="https://github.com/peprolinbot/bus.gal-api",
+        project_urls={
+            "Bug Tracker": "https://github.com/peprolinbot/bus.gal-api/issues",
+        },
+        keywords=['python'],
         classifiers= [
             "Development Status :: 3 - Alpha",
             "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
