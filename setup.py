@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     LONG_DESCRIPTION = fh.read()
 
 setup(
-        name="bus.gal-api", 
+        name="busGal_api", 
         version=VERSION,
         author="Pedro Rey Anca",
         author_email="contact@peprolinbot.com",
