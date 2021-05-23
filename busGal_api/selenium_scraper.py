@@ -100,3 +100,4 @@ class Trip():
                 driver.find_element(By.XPATH, f'//button[normalize-space()="{str(page)}"]').click()
             except NoSuchElementException:
                 break
+        driver.quit()
