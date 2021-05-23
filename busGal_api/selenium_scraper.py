@@ -11,7 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 from selenium.common.exceptions import NoSuchElementException
 
-from http_api import search_stop, search_operator
+from .http_api import search_stop, search_operator
 
 class _Expedition():
     def __init__(self, date, html=None, origin=None, destination=None, departure=None, arrival=None, on_demand=None, operator=None, line=None):

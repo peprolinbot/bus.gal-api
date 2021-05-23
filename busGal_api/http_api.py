@@ -1,4 +1,4 @@
-from utils.requests_handler import *
+from .utils.requests_handler import *
 
 class _Stop():
     def __init__(self, id, name, type, type_id):
