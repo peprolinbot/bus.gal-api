@@ -13,7 +13,7 @@ setup(
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         packages=find_packages(),
-        install_requires=[],
+        install_requires=["beautifulsoup4>=4.9.3", "certifi>=2020.12.5", "chardet>=4.0.0", "idna>=2.10", "requests>=2.25.1", "selenium>=3.141.0", "soupsieve>=2.2.1", "urllib3>=1.26.4"],
         url="https://github.com/peprolinbot/bus.gal-api",
         project_urls={
             "Bug Tracker": "https://github.com/peprolinbot/bus.gal-api/issues",
