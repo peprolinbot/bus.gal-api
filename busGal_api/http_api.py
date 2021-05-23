@@ -1,4 +1,13 @@
-from .utils.requests_handler import *
+import requests
+import json
+
+def _make_get_request(url):
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'}
+    r = requests.get(url , headers=headers)
+    if r.status_code == 200:
+        return r.json()
+    else:
+        raise RequestException("There was an error in the request: Code " + str(r.status_code))
 
 class _Stop():
     def __init__(self, id, name, type, type_id):
@@ -15,7 +24,7 @@ class _Operator():
 
 def get_stops():
     url = "https://www.bus.gal/gl/service/autocomplete/busstop"
-    json = make_get_request(url)
+    json = _make_get_request(url)
     results = []
     for stop in json:
         results.append(_Stop(stop["id"], stop["value"], stop["type"], stop["group_type"]))
@@ -23,7 +32,7 @@ def get_stops():
 
 def search_stop(name):
     url = f"https://www.bus.gal/gl/service/autocomplete/busstop?text={name}"
-    json = make_get_request(url)
+    json = _make_get_request(url)
     results = []
     for stop in json:
         results.append(_Stop(stop["id"], stop["value"], stop["type"], stop["group_type"]))
@@ -31,7 +40,7 @@ def search_stop(name):
 
 def get_operators():
     url = "https://www.bus.gal/gl/service/autocomplete/operator"
-    json = make_get_request(url)
+    json = _make_get_request(url)
     results = []
     for operator in json:
         results.append(_Operator(operator["id"], operator["value"], operator["type"]))
@@ -39,7 +48,7 @@ def get_operators():
 
 def search_operator(name):
     url = f"https://www.bus.gal/gl/service/autocomplete/operator?text={name}"
-    json = make_get_request(url)
+    json = _make_get_request(url)
     results = []
     for operator in json:
         results.append(_Operator(operator["id"], operator["value"], operator["type"]))
