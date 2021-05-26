@@ -18,7 +18,7 @@ class _Expedition():
         if html != None and date != None:
             self._set_parameters_from_html(html, date)
 
-        elif origin != None and destination != None and departure != None and arrival != None and on_demand != None and date != None:
+        elif origin != None and destination != None and departure != None and arrival != None and on_demand != None and operator != None and line != None and date != None:
             self.origin = origin
             self.destination = destination
             self.departure = datetime.strptime(f"{departure}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
