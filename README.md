@@ -1,4 +1,6 @@
 # bus.gal-api
+![GitHub License](https://img.shields.io/github/license/peprolinbot/bus.gal-api) [![PyPI version](https://img.shields.io/pypi/v/busGal-api?label=pypi%20package)](https://pypi.org/project/busGal-api)
+
 Python API wrapper for bus.gal which uses both Selenium with Beautiful Soup and normal http requests to get the inforamtion
 ## Installation
 Just run:
