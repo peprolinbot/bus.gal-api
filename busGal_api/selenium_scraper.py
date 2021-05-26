@@ -87,6 +87,12 @@ class Trip():
         page=1
         while True: #It repeats until it fails loading the next page number
             def _check_if_page_changed_succesfully(driver): #Checks if the expected page number button is active this confirms the correct page is loaded and that it has done it correctly
+                if page == 1:
+                    try:
+                        driver.find_element(By.NAME, 'results_per_page')
+                        return True
+                    except NoSuchElementException:
+                        return False
                 return 'active' in driver.find_element(By.XPATH, f'//button[normalize-space()="{str(page)}"]').get_attribute('class')
             wait.until(_check_if_page_changed_succesfully)
             html = driver.page_source
