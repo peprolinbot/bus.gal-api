@@ -27,9 +27,10 @@ results = api.search_stop(destination)
 selection = menu(results)
 destination = results[selection]
 
-trip = api.Trip(origin, destination, datetime.now()) # Free TechTip for you: Set the 'MOZ_HEADLESS' env bar to anything for this to run in headless mode.
+trip = api.Trip(origin, destination, datetime.now())
 
 print("\nORIGIN  |  DEPARTURE  |  DESTINATION  |  ARRIVAL\n")
 for expedition in trip.expeditions:
     print(f"{expedition.origin}  |  {expedition.departure.strftime('%H:%M')}  |  {expedition.destination}  |  {expedition.arrival.strftime('%H:%M')}")
 ```
+Free **TechTip** for you: Set the `MOZ_HEADLESS` env bar to anything for this to run Firefox in headless mode.
