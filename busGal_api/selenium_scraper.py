@@ -14,11 +14,11 @@ from selenium.common.exceptions import NoSuchElementException
 from .http_api import search_stop, search_operator
 
 class _Expedition():
-    def __init__(self, date, html=None, origin=None, destination=None, departure=None, arrival=None, on_demand=None, operator=None, line=None):
+    def __init__(self, date, html=None, origin=None, destination=None, departure=None, arrival=None, on_demand=None, operator=None, line=None, url=None):
         if html != None and date != None:
             self._set_parameters_from_html(html, date)
 
-        elif origin != None and destination != None and departure != None and arrival != None and on_demand != None and operator != None and line != None and date != None:
+        elif origin != None and destination != None and departure != None and arrival != None and on_demand != None and operator != None and line != None and url != None and date != None:
             self.origin = origin
             self.destination = destination
             self.departure = datetime.strptime(f"{departure}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
@@ -26,6 +26,7 @@ class _Expedition():
             self.on_demand = on_demand
             self.operator = operator
             self.line = line
+            self.url = url
 
         else:
             raise Exception("It is needed to specify the 'date' and either the 'html' argument or all the rest of them")
@@ -39,6 +40,7 @@ class _Expedition():
         self.arrival = datetime.strptime(f"{data[6].get_text()}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
         self.line = data[7].find('strong').text
         self.operator = " ".join(str(data[7]).split("\n")[3].split("<br>")[0].split()) #Super advanced AI to get the operator name Xd
+        self.url = f"https://www.bus.gal{data[8].find('a')['href']}"
 
     def get_origin_object(self):
         self.origin_obj = search_stop(self.origin)[0]
