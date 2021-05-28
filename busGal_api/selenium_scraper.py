@@ -96,12 +96,23 @@ class Trip():
             def _check_if_page_changed_succesfully(driver): #Checks if the expected page number button is active this confirms the correct page is loaded and that it has done it correctly
                 if page == 1:
                     try:
-                        driver.find_element(By.NAME, 'results_per_page')
+                        driver.find_element(By.XPATH, f'//strong[normalize-space()="{self.date.strftime("%d/%m/%Y")}"]')
                         return True
                     except NoSuchElementException:
-                        return False
+                        try:
+                            driver.find_element(By.XPATH, '//div[normalize-space()="Non se atoparon resultados cos criterios de búsqueda seleccionados."]') #Checks if there weren't results
+                            return True
+                        except NoSuchElementException:
+                            return False
+
                 return 'active' in driver.find_element(By.XPATH, f'//button[normalize-space()="{str(page)}"]').get_attribute('class')
             wait.until(_check_if_page_changed_succesfully)
+            try:
+                driver.find_element(By.XPATH, '//div[normalize-space()="Non se atoparon resultados cos criterios de búsqueda seleccionados."]') #Checks if there weren't results
+                self.expeditions = None
+                break
+            except NoSuchElementException:
+                pass
             html = driver.page_source
             soup_data = BeautifulSoup(html, features="lxml")
             expeditions_data = soup_data.find_all('tr')
@@ -113,4 +124,5 @@ class Trip():
                 driver.find_element(By.XPATH, f'//button[normalize-space()="{str(page)}"]').click()
             except NoSuchElementException:
                 break
+            
         driver.quit()
