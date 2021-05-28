@@ -31,6 +31,10 @@ destination = results[selection]
 
 trip = api.Trip(origin, destination, datetime.now())
 
+if trip.expeditions == None:
+    print("No results")
+    exit()
+
 print("\nORIGIN  |  DEPARTURE  |  DESTINATION  |  ARRIVAL\n")
 for expedition in trip.expeditions:
     print(f"{expedition.origin}  |  {expedition.departure.strftime('%H:%M')}  |  {expedition.destination}  |  {expedition.arrival.strftime('%H:%M')}")
