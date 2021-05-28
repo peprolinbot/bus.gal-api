@@ -64,23 +64,28 @@ class Trip():
         self.destination = destination
         self.date = date
 
+        self._set_parameters_from_web()
+
+        
+    def _set_parameters_from_web(self):
+        
         driver = webdriver.Firefox()
         wait = WebDriverWait(driver, 10)
 
         driver.get("https://www.bus.gal/gl")
 
         #Set origin stop
-        driver.find_element(By.NAME, "ori").send_keys(origin.name)
+        driver.find_element(By.NAME, "ori").send_keys(self.origin.name)
         wait.until(visibility_of_element_located((By.ID, "ui-id-1"))) #Waits until the stop selector is visible and so it can press enter
         driver.find_element(By.NAME, "ori").send_keys(Keys.RETURN)
 
         #Set destination stop
-        driver.find_element(By.NAME, "des").send_keys(destination.name)
+        driver.find_element(By.NAME, "des").send_keys(self.destination.name)
         wait.until(visibility_of_element_located((By.ID, "ui-id-2"))) #Waits until the stop selector is visible and so it can press enter
         driver.find_element(By.NAME, "des").send_keys(Keys.RETURN)
 
         #Set the date of the trip
-        driver.find_element(By.NAME, "date[date]").send_keys(date.strftime("%d/%m/%Y"))
+        driver.find_element(By.NAME, "date[date]").send_keys(self.date.strftime("%d/%m/%Y"))
         driver.find_element(By.NAME, "date[date]").send_keys(Keys.RETURN)
 
         driver.find_element(By.XPATH, '//button[normalize-space()="Buscar"]').click()
@@ -102,7 +107,7 @@ class Trip():
             expeditions_data = soup_data.find_all('tr')
             expeditions_html = expeditions_data[2:int((len(expeditions_data)-2)/5+2)] #Find all <tr> tags and remove all of them which aren't expeditions (2 first ones aren't and there 5 times the number of real expeditions of redundant <tr>)
             for expedition in expeditions_html:
-                self.expeditions.append(_Expedition(date=date, html=expedition))
+                self.expeditions.append(_Expedition(date=self.date, html=expedition))
             try:
                 page+=1
                 driver.find_element(By.XPATH, f'//button[normalize-space()="{str(page)}"]').click()
