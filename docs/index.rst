@@ -6,15 +6,15 @@
 Welcome to bus.gal-api's documentation!
 =======================================
 
+.. include:: ../README.rst
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
-    modules
+   modules
    
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
