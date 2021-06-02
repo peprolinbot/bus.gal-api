@@ -14,60 +14,165 @@ from selenium.common.exceptions import NoSuchElementException
 from .http_api import search_stop, search_operator
 
 class _Expedition():
-    def __init__(self, date, html=None, origin=None, destination=None, departure=None, arrival=None, on_demand=None, operator=None, line=None, url=None):
-        if html != None and date != None:
-            self._set_parameters_from_html(html, date)
+    """
+    Represents any of the expeditions of a Trip. Get's it's own data from html code
 
-        elif origin != None and destination != None and departure != None and arrival != None and on_demand != None and operator != None and line != None and url != None and date != None:
-            self.origin = origin
-            self.destination = destination
-            self.departure = datetime.strptime(f"{departure}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
-            self.arrival = datetime.strptime(f"{arrival}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
-            self.on_demand = on_demand
-            self.operator = operator
-            self.line = line
-            self.url = url
+    :param html: <tr> tag for the expedition
+    :type html: BeautifulSoup
 
-        else:
-            raise Exception("It is needed to specify the 'date' and either the 'html' argument or all the rest of them")
+    :param date: Date the expeditions take place. Just the day matters
+    :type date: datetime.datetime
+    """
 
-    def _set_parameters_from_html(self, html, date):
+    def __init__(self, html, date):   
         data = html.find_all('td')
+
         self.on_demand = bool(re.search("Servizo baixo demanda", str(data[0])))
+        """
+        Whether th stop is on demand 
+
+        :type: bool
+        """
+
         self.origin = data[3].get_text()
+        """
+        Origin stop name
+
+        :type: str
+        """
+
         self.departure = datetime.strptime(f"{data[4].get_text()}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
+        """
+        Deaparture time
+
+        :type: datetime.datetime
+        """
+
         self.destination = data[5].get_text()
+        """
+        Destination stop name
+
+        :type: str
+        """
+
         self.arrival = datetime.strptime(f"{data[6].get_text()}-{date.strftime('%d/%m/%Y')}", "%H:%M-%d/%m/%Y")
+        """
+        Arrival time
+
+        :type: datetime.datetime
+        """
+
         self.line = data[7].find('strong').text
+        """
+        Bus line
+
+        :type: str
+        """
+
         self.operator = " ".join(str(data[7]).split("\n")[3].split("<br>")[0].split()) #Super advanced AI to get the operator name Xd
+        """
+        Operator name
+
+        :type: str
+        """
+
         self.url = f"https://www.bus.gal{data[8].find('a')['href']}"
+        """
+        Url on bus.gal for the expedition page
+
+        :type: str
+        """
 
     def get_origin_object(self):
+        """
+        Turns the origin attribute into an object
+
+        :return: Origin stop object
+        :rtype: _Stop
+        """
+        
         self.origin_obj = search_stop(self.origin)[0]
+
         return self.origin_obj
     
     def get_destination_object(self):
+        """
+        Turns the destination attribute into an object
+
+        :return: Destination stop object
+        :rtype: _Stop
+        """
+        
         self.destination_obj = search_stop(self.destination)[0]
         return self.destination_obj
 
     def get_operator_object(self):
+        """
+        Turns the operator attribute into an object
+
+        :return: Operator object
+        :rtype: _Operator
+        """
+
         self.operator_obj = search_operator(self.operator)[0]
         return self.operator_obj
 
     def turn_strings_into_objects(self):
+        """
+        Executes and returns the values of get_origin_object(), get_destination_object() and get_operator_object(). In that order
+
+        :return: Operator object
+        :rtype: list[_Stop, _Stop, _Operator]
+        """
+
         return self.get_origin_object(), self.get_destination_object(), self.get_operator_object()
 
 
 class Trip():
+    """
+    Trip class. Used for getting results as Expedition objects
+    
+    :param origin: Origin stop
+    :type origin: _Stop
+
+    :param destination: Destination stop
+    :type destination: _Stop
+
+    :param date: The date the trip will take place. Just the day matters
+    :type date: datetime.datetime
+    """
+
     def __init__(self, origin, destination, date):
         self.origin = origin
+        """
+        Origin stop
+
+        :type: _Stop
+        """
+
         self.destination = destination
+        """
+        Destination stop
+
+        :type: _Stop
+        """
         self.date = date
 
-        self._set_parameters_from_web()
+        self.expeditions = self._set_expeditions_from_web()
+        """
+        List of avaliable expeditions
+
+        :type: list[_Expedition]
+        """
 
         
-    def _set_parameters_from_web(self):
+    def _set_expeditions_from_web(self):
+        """
+        Obtains all the expeditions from the bus.gal web. Uses Selenium. Called on creation
+
+        :return: List of avaliable expeditions
+        :rtype: list[_Expedition]
+        """
         
         driver = webdriver.Firefox()
         wait = WebDriverWait(driver, 10)
@@ -124,5 +229,7 @@ class Trip():
                 driver.find_element(By.XPATH, f'//button[normalize-space()="{str(page)}"]').click()
             except NoSuchElementException:
                 break
-            
+
         driver.quit()
+
+        return self.expeditions
