@@ -12,11 +12,3 @@ busGal\_api module
    :private-members:
    :undoc-members:
    :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: busGal_api
-   :members:
-   :undoc-members:
-   :show-inheritance:
