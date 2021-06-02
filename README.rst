@@ -3,9 +3,9 @@ bus.gal-api
 ===========
 
 
-.. image:: https://img.shields.io/github/license/peprolinbot/bus.gal-api
-   :target: https://img.shields.io/github/license/peprolinbot/bus.gal-api
-   :alt: GitHub License
+.. image:: https://img.shields.io/pypi/l/busgal-api
+   :target: https://pypi.org/project/busGal-api
+   :alt: PyPi License
  
 .. image:: https://img.shields.io/pypi/v/busGal-api?label=pypi%20package
    :target: https://pypi.org/project/busGal-api
