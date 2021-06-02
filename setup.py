@@ -17,6 +17,7 @@ setup(
         url="https://github.com/peprolinbot/bus.gal-api",
         project_urls={
             "Bug Tracker": "https://github.com/peprolinbot/bus.gal-api/issues",
+            "Documentation": "https://busgal-api.readthedocs.io/en/latest/",
         },
         keywords=['python'],
         classifiers= [
