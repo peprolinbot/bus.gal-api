@@ -23,7 +23,7 @@ Just run:
 
    pip install busGal_api
 
-Quick exmaple
+Quick example
 -------------
 
 This is just a simple command-line "client"
