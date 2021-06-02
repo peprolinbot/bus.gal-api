@@ -12,7 +12,11 @@ bus.gal-api
    :alt: PyPI version
 
 
-Python API wrapper for bus.gal which uses both Selenium with Beautiful Soup and normal http requests to get the inforamtion
+Python API wrapper for bus.gal which uses both Selenium with Beautiful Soup and normal http requests to get the information
+
+Documentation
+-------------
+Documentation can be found in https://busgal-api.readthedocs.io/en/latest/
 
 Installation
 ------------
