@@ -13,7 +13,7 @@ def _make_get_request(url):
     if r.status_code == 200:
         return r.json()
     else:
-        raise RequestException("There was an error in the request: Code " + str(r.status_code))
+        raise Exception("There was an error in the request: Code " + str(r.status_code))
 
 class _Stop():
     """

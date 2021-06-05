@@ -1,4 +1,3 @@
-
 bus.gal-api
 ===========
 
@@ -12,7 +11,9 @@ bus.gal-api
    :alt: PyPI version
 
 
-Python API wrapper for bus.gal which uses both Selenium with Beautiful Soup and normal http requests to get the information
+Python API wrapper for bus.gal which uses the associated app's http API to get the inforamtion. I got the endpoints using mitmproxy
+
+There is also included an old implementation using selenium, which isn't included in the package, it's in busdotg
 
 Documentation
 -------------
@@ -61,6 +62,6 @@ This is just a simple command-line "client"
 
    print("\nORIGIN  |  DEPARTURE  |  DESTINATION  |  ARRIVAL\n")
    for expedition in trip.expeditions:
-       print(f"{expedition.origin}  |  {expedition.departure.strftime('%H:%M')}  |  {expedition.destination}  |  {expedition.arrival.strftime('%H:%M')}")
+       print(f"{expedition.origin.name}  |  {expedition.departure.strftime('%H:%M')}  |  {expedition.destination.name}  |  {expedition.arrival.strftime('%H:%M')}")
 
 Free **TechTip** for you: Set the ``MOZ_HEADLESS`` env bar to anything for this to run Firefox in headless mode.
