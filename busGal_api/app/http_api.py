@@ -267,7 +267,7 @@ def search_stop(name):
     :return: List of stop results
     :rtype: list[_Stop]
     """
-    url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/busstops/autocomplete?text={name}"
+    url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/busstops/autocomplete?text={name}&num_results=2147483647"
     json = _make_get_request(url)["results"]
     results = []
     for stop in json:
@@ -285,7 +285,7 @@ def search_operator(name):
     :return: List of operator results
     :rtype: list[_Operator]
     """
-    url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/operators/autocomplete?text={name}"
+    url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/operators/autocomplete?text={name}&num_results=2147483647"
     json = _make_get_request(url)["results"]
     results = []
     for operator in json:
