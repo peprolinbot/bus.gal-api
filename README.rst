@@ -64,7 +64,6 @@ This is just a simple command-line "client"
    for expedition in trip.expeditions:
        print(f"{expedition.origin.name}  |  {expedition.departure.strftime('%H:%M')}  |  {expedition.destination.name}  |  {expedition.arrival.strftime('%H:%M')}")
 
-Free **TechTip** for you: Set the ``MOZ_HEADLESS`` env bar to anything for this to run Firefox in headless mode.
 
 Disclaimer
 ----------
