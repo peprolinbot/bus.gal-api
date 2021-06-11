@@ -65,3 +65,8 @@ This is just a simple command-line "client"
        print(f"{expedition.origin.name}  |  {expedition.departure.strftime('%H:%M')}  |  {expedition.destination.name}  |  {expedition.arrival.strftime('%H:%M')}")
 
 Free **TechTip** for you: Set the ``MOZ_HEADLESS`` env bar to anything for this to run Firefox in headless mode.
+
+Disclaimer
+----------
+
+This project is not endorsed by, directly affiliated with, maintained by, sponsored by or in any way officially related with la Xunta de Galicia or any of the companies involved in the bus.gal website.
