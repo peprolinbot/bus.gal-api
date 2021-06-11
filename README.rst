@@ -11,13 +11,17 @@ bus.gal-api
    :alt: PyPI version
 
 
-Python API wrapper for bus.gal which uses the associated app's http API to get the inforamtion. I got the endpoints using mitmproxy
+Python API wrapper for bus.gal_ which uses the associated app_'s http API to get the inforamtion. I got the endpoints using mitmproxy_
 
 There is also included an old implementation using selenium, which isn't included in the package, it's in busdotg
 
+.. _bus.gal: https://www.bus.gal/
+.. _app: https://play.google.com/store/apps/details?id=gal.xunta.transportepublico
+.. _mitmproxy: https://mitmproxy.org/
+
 Documentation
 -------------
-Documentation can be found in https://busgal-api.readthedocs.io/en/latest/
+Documentation can be found `here <https://busgal-api.readthedocs.io/en/latest/>`_
 
 Installation
 ------------
@@ -68,4 +72,4 @@ This is just a simple command-line "client"
 Disclaimer
 ----------
 
-This project is not endorsed by, directly affiliated with, maintained by, sponsored by or in any way officially related with la Xunta de Galicia or any of the companies involved in the bus.gal website.
+This project is not endorsed by, directly affiliated with, maintained by, sponsored by or in any way officially related with la Xunta de Galicia, the bus operators or any of the companies involved in the bus.gal_ website and the app_.
