@@ -257,6 +257,21 @@ class Trip():
 
         return expeditions
 
+def get_stops():
+    """
+    Gets all the existing stops
+
+    :return: List of all stops
+    :rtype: list[_Stop]
+    """
+    url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/busstops/autocomplete?text&num_results=2147483647"
+    json = _make_get_request(url)["results"]
+    results = []
+    for stop in json:
+        results.append(_Stop(stop["id"], stop["text"], stop["type"], stop["group_type"]))
+
+    return results
+
 def search_stop(name):
     """
     Searchs for stops with the specified name, using the app's search api
@@ -273,6 +288,20 @@ def search_stop(name):
     for stop in json:
         results.append(_Stop(stop["id"], stop["text"], stop["type"], stop["group_type"]))
     
+    return results
+
+def get_operators():
+    """
+    Gets all the existing operators
+
+    :return: List of all operators
+    :rtype: list[_Operator]
+    """
+    url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/operators/autocomplete?text&num_results=2147483647"
+    json = _make_get_request(url)["results"]
+    results = []
+    for operator in json:
+        results.append(_Operator(operator["id"], operator["text"], operator["type"]))
     return results
 
 def search_operator(name):
