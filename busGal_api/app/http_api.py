@@ -187,7 +187,7 @@ class _Expedition():
         :type: bool
         """
 
-        self.url = f"https://www.bus.gal/gl/service/expedition/{self.line.id}/nojs?ori={self.origin.bus_stop_id}&des={self.destination.bus_stop_id}&date={date.strftime('%Y-%m-%d')}"
+        self.url = f"https://www.bus.gal/gl/service/expedition/{self.id}/nojs?ori={self.origin.bus_stop_id}&des={self.destination.bus_stop_id}&date={date.strftime('%Y-%m-%d')}"
         """
         Url on bus.gal for the expedition page
 
