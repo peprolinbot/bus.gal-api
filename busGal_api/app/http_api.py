@@ -173,7 +173,7 @@ class _Expedition():
             operator_type = operator.type
         else:
             operator_type = "operator"
-        self.operator = _Operator(data["operator_id"], data["operator"], operator_type),
+        self.operator = _Operator(data["operator_id"], data["operator"], operator_type)
         """
         Operator object. Note that if no operator argument was given the type of this will default to "operator"
 
