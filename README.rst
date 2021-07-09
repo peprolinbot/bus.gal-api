@@ -26,7 +26,7 @@ Installation
 
 Just run:
 
-.. code-block::
+.. code-block:: bash
 
    pip install busGal_api
 
@@ -35,7 +35,7 @@ Quick example
 
 This is just a simple command-line "client"
 
-.. code-block::
+.. code-block:: python
 
    import busGal_api as api
    from datetime import datetime
