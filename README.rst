@@ -2,13 +2,17 @@ bus.gal-api
 ===========
 
 
-.. image:: https://img.shields.io/pypi/l/busgal-api
-   :target: https://pypi.org/project/busGal-api
-   :alt: PyPi License
+.. image:: https://img.shields.io/github/license/peprolinbot/bus.gal-api
+   :target: https://github.com/peprolinbot/bus.gal-api
+   :alt: GitHub license
 
 .. image:: https://img.shields.io/pypi/v/busGal-api?label=pypi%20package
    :target: https://pypi.org/project/busGal-api
    :alt: PyPI version
+
+.. image:: https://github.com/peprolinbot/bus.gal-api/actions/workflows/python-publish.yml/badge.svg
+   :target: https://github.com/peprolinbot/bus.gal-api/actions/workflows/python-publish.yml
+   :alt: Upload Python Package
 
 
 Python API wrapper for bus.gal_ which uses the associated app_'s http API to get the inforamtion. I got the endpoints using mitmproxy_
