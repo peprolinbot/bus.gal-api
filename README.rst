@@ -5,15 +5,13 @@ bus.gal-api
 .. image:: https://img.shields.io/pypi/l/busgal-api
    :target: https://pypi.org/project/busGal-api
    :alt: PyPi License
- 
+
 .. image:: https://img.shields.io/pypi/v/busGal-api?label=pypi%20package
    :target: https://pypi.org/project/busGal-api
    :alt: PyPI version
 
 
 Python API wrapper for bus.gal_ which uses the associated app_'s http API to get the inforamtion. I got the endpoints using mitmproxy_
-
-There is also included an old implementation using selenium, which isn't included in the package, it's in busdotg
 
 .. _bus.gal: https://www.bus.gal/
 .. _app: https://play.google.com/store/apps/details?id=gal.xunta.transportepublico
