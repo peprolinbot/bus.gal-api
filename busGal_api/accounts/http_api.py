@@ -1,4 +1,5 @@
 from ..requests import *
+from urllib.parse import quote_plus as urlencode
 
 def register_account(email, password, name, last_name, identity_type, identity_number, phone_number):
     """
@@ -23,6 +24,13 @@ def register_account(email, password, name, last_name, identity_type, identity_n
     }
     url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/user/register"
     make_post_request(url, data)
+
+def recover_password(email):
+    """
+    Recover an account's password (sends an email with a new temporal one)
+    """
+    url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/user/password?email={urlencode(email)}"
+    make_get_request(url)
 
 class _Card():
     """
