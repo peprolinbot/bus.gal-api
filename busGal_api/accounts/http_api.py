@@ -201,7 +201,7 @@ class Account():
         self.last_name = user_data["last_name"]
         self.email  = user_data["email"]
         self.identity_number = user_data["identity_number"]
-        self.identity_type = "DNI" if user_data["identity_type"] == 1 else "other"
+        self.identity_type = "DNI" if user_data["identity_type"] == 1 else "other" # else is used here, "other" is 2
         self.phone_number = user_data["phone_number"]
 
     def get_cards(self):
