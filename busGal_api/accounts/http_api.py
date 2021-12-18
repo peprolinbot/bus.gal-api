@@ -9,7 +9,7 @@ class _Card():
         """
         The user account the card belongs to
 
-        :type: _Account
+        :type: Account
         """
 
         self.number = number
