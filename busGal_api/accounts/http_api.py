@@ -179,7 +179,7 @@ class Account():
             self.token = json["results"]["token"]["user_token"] # A new token is returned in every request, tokens don't seem to expire, but just in case we'll do as in the app.
             return json
         else:
-            raise Exception("There was an error in the request: Code " + str(r.status_code))
+            raise Exception(f"There was an error in the request: Code {r.status_code}")
 
     def login(self, email, password):
         """
