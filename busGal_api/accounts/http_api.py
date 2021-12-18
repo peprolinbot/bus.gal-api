@@ -1,5 +1,29 @@
 from ..requests import *
 
+def register_account(email, password, name, last_name, identity_type, identity_number, phone_number):
+    """
+    Register an user account
+    """
+    if identity_type == "DNI":
+        identity_type = 1
+    elif identity_type == "other":
+        identity_type = 2
+    else:
+        raise Exception("identity_type must be 'DNI' or 'other'")
+
+    data = {
+        "check_data_protection": 1,
+        "email": email,
+        "password": password,
+        "name": name,
+        "last_name": last_name,
+        "identity_type": identity_type,
+        "identity_number": identity_number,
+        "phone_number": str(phone_number)
+    }
+    url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/user/register"
+    make_post_request(url, data)
+
 class _Card():
     """
     Class that represents a card. If an object of this class is deleted, so will be the card, it's in the destructor (__del__)
