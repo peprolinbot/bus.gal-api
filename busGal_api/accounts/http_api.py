@@ -1,4 +1,4 @@
-import requests
+from ..requests import *
 
 class _Card():
     """
@@ -151,35 +151,25 @@ class Account():
 
     def _make_post_request(self, url, data):
         """
-        Makes a post request with the given dict of data data using the app's headers (okhttp) and the object's token, which is updated after every request. Not intended to be used by clients
+        Calls make_post_request using the object's token, which is updated after every request. Not intended to be used by clients
 
         :return: Dictionary made from the request's json
         :rtype: dict
         """
-        headers = {'User-Agent': 'okhttp/3.10.0', 'Content-type': 'application/json;charset=UTF-8', 'Authorization': f"Bearer {self.token}"}
-        r = requests.post(url , headers=headers, json=data)
-        if r.status_code == 200:
-            json = r.json()
-            self.token = json["results"]["token"]["user_token"] # A new token is returned in every request, tokens don't seem to expire, but just in case we'll do as in the app.
-            return json
-        else:
-            raise Exception(f"There was an error in the request: Code {r.status_code}")
+        json = make_post_request(url, data, self.token)
+        self.token = json["results"]["token"]["user_token"] # A new token is returned in every request, tokens don't seem to expire, but just in case we'll do as in the app.
+        return json
 
     def _make_get_request(self, url):
         """
-        Makes a get request using the app's headers (okhttp) and the object's token, which is updated after every request. Not intended to be used by clients
+        Calls make_get_request using the object's token, which is updated after every request. Not intended to be used by clients
 
         :return: Dictionary made from the request's json
         :rtype: dict
         """
-        headers = {'User-Agent': 'okhttp/3.10.0', 'Authorization': f"Bearer {self.token}"}
-        r = requests.get(url , headers=headers)
-        if r.status_code == 200:
-            json = r.json()
-            self.token = json["results"]["token"]["user_token"] # A new token is returned in every request, tokens don't seem to expire, but just in case we'll do as in the app.
-            return json
-        else:
-            raise Exception(f"There was an error in the request: Code {r.status_code}")
+        json = make_get_request(url, self.token)
+        self.token = json["results"]["token"]["user_token"] # A new token is returned in every request, tokens don't seem to expire, but just in case we'll do as in the app.
+        return json
 
     def login(self, email, password):
         """
