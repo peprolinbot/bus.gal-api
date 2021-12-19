@@ -1,20 +1,5 @@
-import requests
-import json
+from ..requests import *
 from datetime import datetime
-
-def _make_get_request(url):
-    """
-    Makes a get request using the app's headers (okhttp). Not intended to be used by clients
-
-    :return: Dictionary made from the request's json
-    :rtype: dict
-    """
-    headers = {'User-Agent': 'okhttp/3.10.0'}
-    r = requests.get(url , headers=headers)
-    if r.status_code == 200:
-        return r.json()
-    else:
-        raise Exception("There was an error in the request: Code " + str(r.status_code))
 
 class _Stop():
     """
@@ -23,7 +8,7 @@ class _Stop():
     def __init__(self, id, name, type, type_id, bus_stop_id=None):
         self.id = id
         """
-        Id of the stop 
+        Id of the stop
 
         :type: int
         """
@@ -63,7 +48,7 @@ class _Operator():
     def __init__(self, id, name, type):
         self.id = id
         """
-        Id of the operator 
+        Id of the operator
 
         :type: int
         """
@@ -182,7 +167,7 @@ class _Expedition():
 
         self.on_demand = not bool(data["on_demand"])
         """
-        Whether th stop works under demand 
+        Whether th stop works under demand
 
         :type: bool
         """
@@ -198,7 +183,7 @@ class _Expedition():
 class Trip():
     """
     Trip class. Used for getting results as Expedition objects
-    
+
     :param origin: Origin stop
     :type origin: _Stop
 
@@ -235,7 +220,7 @@ class Trip():
         :type: list[_Expedition]
         """
 
-        
+
     def _get_expeditions_from_api(self, origin, destination, date, operator):
         """
         Obtains all the expeditions from the app API. Called on creation
@@ -246,8 +231,8 @@ class Trip():
         date_timestamp = int(datetime(date.year, date.month, date.day).timestamp()) * 1000 #It's multiplied by 1000 to add extra precision the API needs
 
         url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/service/search?origin_id={origin.id}&destination_id={destination.id}&origin_type={origin.type}&destination_type={destination.type}&date={date_timestamp}&departure_time={date_timestamp}&page_number=1&page_size=2147483647"
-        json = _make_get_request(url)["results"]
-        
+        json = make_get_request(url)["results"]
+
         expeditions = []
         for expedition in json:
             if operator != None:
@@ -265,7 +250,7 @@ def get_stops():
     :rtype: list[_Stop]
     """
     url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/busstops/autocomplete?text&num_results=2147483647"
-    json = _make_get_request(url)["results"]
+    json = make_get_request(url)["results"]
     results = []
     for stop in json:
         results.append(_Stop(stop["id"], stop["text"], stop["type"], stop["group_type"]))
@@ -275,7 +260,7 @@ def get_stops():
 def search_stop(name):
     """
     Searchs for stops with the specified name, using the app's search api
-    
+
     :param name: Search query
     :type name: str
 
@@ -283,11 +268,11 @@ def search_stop(name):
     :rtype: list[_Stop]
     """
     url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/busstops/autocomplete?text={name}&num_results=2147483647"
-    json = _make_get_request(url)["results"]
+    json = make_get_request(url)["results"]
     results = []
     for stop in json:
         results.append(_Stop(stop["id"], stop["text"], stop["type"], stop["group_type"]))
-    
+
     return results
 
 def get_operators():
@@ -298,7 +283,7 @@ def get_operators():
     :rtype: list[_Operator]
     """
     url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/operators/autocomplete?text&num_results=2147483647"
-    json = _make_get_request(url)["results"]
+    json = make_get_request(url)["results"]
     results = []
     for operator in json:
         results.append(_Operator(operator["id"], operator["text"], operator["type"]))
@@ -307,7 +292,7 @@ def get_operators():
 def search_operator(name):
     """
     Searchs for operators with the specified name, using the app's search api
-        
+
     :param name: Search query
     :type name: str
 
@@ -315,7 +300,7 @@ def search_operator(name):
     :rtype: list[_Operator]
     """
     url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/operators/autocomplete?text={name}&num_results=2147483647"
-    json = _make_get_request(url)["results"]
+    json = make_get_request(url)["results"]
     results = []
     for operator in json:
         results.append(_Operator(operator["id"], operator["text"], operator["type"]))

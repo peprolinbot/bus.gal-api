@@ -15,7 +15,7 @@ bus.gal-api
    :alt: Upload Python Package
 
 
-Python API wrapper for bus.gal_ which uses the associated app_'s http API to get the inforamtion. I got the endpoints using mitmproxy_
+Python API wrapper for bus.gal_ which uses the associated app_'s http API to get the inforamtion about buses, your card and your user account. I got the endpoints using mitmproxy_
 
 .. _bus.gal: https://www.bus.gal/
 .. _app: https://play.google.com/store/apps/details?id=gal.xunta.transportepublico
