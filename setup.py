@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.4.4' 
+VERSION = '0.0.5.0' 
 DESCRIPTION = 'Python API wrapper for bus.gal'
 with open("README.rst", "r", encoding="utf-8") as fh:
     LONG_DESCRIPTION = fh.read()
