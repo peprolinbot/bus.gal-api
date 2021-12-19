@@ -4,6 +4,15 @@ def make_post_request(url, data, token=None):
     """
     Makes a post request with the given dict of data data using the app's headers (okhttp) and authorize if token is set. Not intended to be used by clients
 
+    :param url: Full url to make the request to
+    :type url: str
+
+    :param data: Data to send, it will be sent as application/json
+    :type data: dict
+
+    :param token: Bearer token to use for authentication, it is a JWT
+    :type token: str
+
     :return: Dictionary made from the request's json
     :rtype: dict
     """
@@ -19,6 +28,12 @@ def make_post_request(url, data, token=None):
 def make_get_request(url, token=None):
     """
     Makes a get request using the app's headers (okhttp) and authorize if token is set. Not intended to be used by clients
+
+    :param url: Full url to make the request to
+    :type url: str
+
+    :param token: Bearer token to use for authentication, it is a JWT
+    :type token: str
 
     :return: Dictionary made from the request's json
     :rtype: dict

@@ -4,6 +4,27 @@ from urllib.parse import quote_plus as urlencode
 def register_account(email, password, name, last_name, identity_type, identity_number, phone_number):
     """
     Register an user account
+
+    :param email: Email address
+    :type email: str
+
+    :param password: Password (Must be at least 6 character length, including a digit and an upper case letter)
+    :type email: str
+
+    :param name: First name
+    :type name: str
+
+    :param last_name: Last name
+    :type last_name: str
+
+    :param identity_type: Identity type: "DNI" or "other"
+    :type identity_type: str
+
+    :param identity_number: Identity number e.g. your DNI
+    :type identity_number: str
+
+    :param phone_number: Phone number
+    :type phone_number: str
     """
     if identity_type == "DNI":
         identity_type = 1
@@ -28,6 +49,9 @@ def register_account(email, password, name, last_name, identity_type, identity_n
 def recover_password(email):
     """
     Recover an account's password (sends an email with a new temporal one)
+
+    :param email: Email address
+    :type email: str
     """
     url = f"https://tpgal-ws.xunta.gal/tpgal_ws/rest/user/password?email={urlencode(email)}"
     make_get_request(url)
@@ -108,6 +132,9 @@ class _Card():
     def rename(self, alias):
         """
         Change the alias of the card
+
+        :param alias: New alias for the card
+        :type alias: str
         """
         self.account.rename_card(self.number, alias)
 
@@ -116,7 +143,19 @@ class _Card():
 
 class Account():
     """
-    Class that represents a user account
+    Class that represents a user account. Either email and password or token and user_id (not really necessary) must be specified
+
+    :param email: Email address to login with
+    :type email: str
+
+    :param password: Password to log in with
+    :type password: str
+
+    :param token: Auth token to use for the requests. It will be auto-obtained if email and password are specified
+    :type token: str
+
+    :param user_id: The user account's id. Not really needed for anything unless you are doing weird shit with the JWTs
+    :type user_id: int
     """
     def __init__(self, email=None, password=None, token=None, user_id=None):
         if token is None:
@@ -185,6 +224,12 @@ class Account():
         """
         Calls make_post_request using the object's token, which is updated after every request. Not intended to be used by clients
 
+        :param url: Full url to make the request to
+        :type url: str
+
+        :param data: Data to send, it will be sent as application/json
+        :type data: dict
+
         :return: Dictionary made from the request's json
         :rtype: dict
         """
@@ -196,6 +241,9 @@ class Account():
         """
         Calls make_get_request using the object's token, which is updated after every request. Not intended to be used by clients
 
+        :param url: Full url to make the request to
+        :type url: str
+
         :return: Dictionary made from the request's json
         :rtype: dict
         """
@@ -206,6 +254,12 @@ class Account():
     def login(self, email, password):
         """
         Logins with the given email and password and returns a token, which is also set to self.token
+
+        :param email: Email address to login with
+        :type email: str
+
+        :param password: Password to login with
+        :type password: str
 
         :return: User token
         :rtype: str
@@ -260,6 +314,9 @@ class Account():
         """
         Get the object for the user's card with the specified number
 
+        :param number: Number of the card
+        :type number: str
+
         :return: Card object
         :rtype: _Card
         """
@@ -270,6 +327,12 @@ class Account():
     def add_card(self, number, alias):
         """
         Add a card to the user with the specified number and alias
+
+        :param number: Number of the card
+        :type number: str
+
+        :param alias: Alias for the card
+        :type alias: str
         """
         url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/cards/register"
         data = {
@@ -282,6 +345,12 @@ class Account():
     def rename_card(self, number, alias):
         """
         Change the alias of a card with the specified number
+
+        :param number: Number of the card
+        :type number: str
+
+        :param alias: New alias for the card
+        :type alias: str
         """
         url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/cards/update"
         data = {
@@ -293,6 +362,9 @@ class Account():
     def delete_card(self, number):
         """
         Delete the card with the specified number
+
+        :param number: Number of the card
+        :type number: str
         """
         url = "https://tpgal-ws.xunta.gal/tpgal_ws/rest/cards/unregister"
         data = {"number": str(number)}
