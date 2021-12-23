@@ -138,9 +138,6 @@ class _Card():
         """
         self.account.rename_card(self.number, alias)
 
-    def __del__(self):
-        self.account.delete_card(self.number)
-
 class Account():
     """
     Class that represents a user account. Either email and password or token and user_id (not really necessary) must be specified
