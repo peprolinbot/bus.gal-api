@@ -1,4 +1,5 @@
 from ..requests import *
+from .equivalent_stops import equivalent_stops
 from datetime import datetime
 
 class _Stop():
@@ -195,9 +196,12 @@ class Trip():
 
     :param operator: The operator that you would like to own the buses
     :type operator: _Operator
+
+    :param equivalent: Wether or not to get equivalent trips. Fixes stops which are the same one in the real world but are different ones in the API.
+    :type equivalent: bool
     """
 
-    def __init__(self, origin, destination, date, operator=None):
+    def __init__(self, origin, destination, date, operator=None, equivalents=True):
         self.origin = origin
         """
         Origin stop
@@ -213,7 +217,11 @@ class Trip():
         """
         self.date = date
 
-        self.expeditions = self._get_expeditions_from_api(origin, destination, date, operator)
+        if equivalents:
+            expeditions = self._get_equivalent_expeditions_from_api(origin, destination, date, operator)
+        else:
+            expeditions = self._get_expeditions_from_api(origin, destination, date, operator)
+        self.expeditions = expeditions
         """
         List of avaliable expeditions
 
@@ -240,6 +248,33 @@ class Trip():
             else:
                 expeditions.append(_Expedition(expedition, date))
 
+        return expeditions
+
+    def _get_equivalent_expeditions_from_api(self, origin, destination, date, operator):
+        """
+        Calls _get_expeditions_from_api for every equivalent combination of stops and returns a list with all the expeditions merged. Called on creation if equivalents==true.
+
+        :return: List of avaliable expeditions
+        :rtype: list[_Expedition]
+        """
+        stops = get_stops()
+        stop_ids = [stop.id for stop in stops]
+
+        origins = [origin]
+        destinations = [destination]
+
+        alt_origin_id = equivalent_stops.get(self.origin.id)
+        if alt_origin_id:
+            origins.append(stops[stop_ids.index(alt_origin_id)])
+
+        alt_destination_id = equivalent_stops.get(self.destination.id)
+        if alt_destination_id:
+            destinations.append(stops[stop_ids.index(alt_destination_id)])
+
+        expeditions = []
+        for origin in origins:
+            for destination in destinations:
+                expeditions += self._get_expeditions_from_api(origin, destination, date, operator)
         return expeditions
 
 def get_stops():
