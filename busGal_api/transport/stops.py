@@ -204,7 +204,7 @@ def location_search_stops(location: Location = None, lat: float = None, long: fl
     else:
         if not (lat and long):
             raise TypeError(
-                "location_search_stops expected either the location or both the lat and long arguments")
+                "location_search_stops() expected either the 'location' or both the 'lat' and 'long' arguments")
 
     return _parse_stop_search_results(_rest_adapter.get("/busstops/in-range",
                                                        ep_params={"latitude": lat,
