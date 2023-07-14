@@ -1,13 +1,7 @@
 # bus.gal-api 🚍
 
-
-<img src="logo.svg" alt="bus.gal-telegram" width=200/>
-
-
 [![GitHub license](https://img.shields.io/github/license/peprolinbot/bus.gal-api)](https://github.com/peprolinbot/bus.gal-api)
-
 [![PyPI version](https://img.shields.io/pypi/v/busGal-api?label=pypi%20package)](https://pypi.org/project/busGal-api)
-
 [![Upload Python Package](https://github.com/peprolinbot/bus.gal-api/actions/workflows/python-publish.yml/badge.svg)](https://github.com/peprolinbot/bus.gal-api/actions/workflows/python-publish.yml)
 
 Python API wrapper for [the galician public transport](https://www.bus.gal/) which uses the
@@ -18,7 +12,7 @@ account. I got the endpoints using [mitmproxy](https://mitmproxy.org/).
 
 ## 📜 Documentation
 
-Documentation can be found [here](https://peprolinbot.github.io/busGal_api). There are two main submodules: `busGal_api.transport` and `busGal_api.accounts`, the first one has all the functions related to transportation and the second one allows you to manage cards and accounts, as the name implies.
+Documentation can be found [here](https://peprolinbot.github.io/bus.gal-api). There are two main submodules: `busGal_api.transport` and `busGal_api.accounts`, the first one has all the functions related to transportation and the second one allows you to manage cards and accounts, as the name implies.
 
 ## 🔧 Installation
 
