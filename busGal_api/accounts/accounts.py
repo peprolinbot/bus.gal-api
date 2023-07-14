@@ -72,7 +72,7 @@ class Card():
         self.expired = card.expired
         self.summary_movements = card.summary_movements
 
-    def rename(self, alias) -> None:
+    def rename(self, alias: str) -> None:
         """
         Change the alias of the card
 
