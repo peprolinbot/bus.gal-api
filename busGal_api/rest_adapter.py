@@ -5,19 +5,23 @@ import logging
 from .exceptions import TPGalWSException, TPGalWSBlankResponse
 
 
-class RestAdapter:
+class RestAdapter():
     """
     Trip class. Used for getting results as Expedition objects
 
     :param url: Base url of the rest service, e.g. https://tpgal-ws.xunta.gal/tpgal_ws/rest. The known ones are in known_servers.py
-    :type url: str
+
+    :param token: The token used to authenticate to endpoints that are for logged in users
+
+    :param token_type: The said token's type. In my tests it's always been `Bearer`, so that's the default
 
     :param logger: If your app has a logger, pass it in here
-    :type logger: logging.Logger
     """
 
-    def __init__(self, url: str, logger: logging.Logger = None):
+    def __init__(self, url: str, token: str = None, token_type: str = "Bearer", logger: logging.Logger = None):
         self.url = url
+        self.token = token
+        self.token_type = token_type
         self._logger = logger or logging.getLogger(__name__)
 
     def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None) -> dict:
@@ -36,7 +40,12 @@ class RestAdapter:
         """
 
         full_url = self.url + endpoint
-        log_line_pre = f"method={http_method}, url={full_url}, params={{{ep_params}}}" # The multiple brackets are to escape the dict
+        headers = {"Authorization": f"{self.token_type} {self.token}"}
+
+        def _escape_dict(data: dict) -> str:
+            return str(data).replace("{", "{{").replace("}", "}}")
+            
+        log_line_pre = f"method={http_method}, url={full_url}, params={_escape_dict(ep_params)}, data={_escape_dict(data)}"
         print(log_line_pre)
         log_line_post = ', '.join(
             (log_line_pre, "success={}, status_code={}, message={}"))
@@ -44,7 +53,7 @@ class RestAdapter:
         try:
             self._logger.debug(msg=log_line_pre)
             response = requests.request(
-                method=http_method, url=full_url, params=ep_params, json=data)
+                method=http_method, url=full_url, headers=headers, params=ep_params, json=data)
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
             raise TPGalWSException("Request failed") from e
