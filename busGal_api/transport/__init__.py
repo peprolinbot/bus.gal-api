@@ -9,5 +9,6 @@ from . import stops
 from . import operators
 from . import expeditions
 from . import warning_alerts
+from . import rates
 
 __all__ = ["lines", "stops", "operators", "expeditions", "warning_alerts", "rates"]
