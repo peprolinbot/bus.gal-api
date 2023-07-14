@@ -28,12 +28,6 @@ pip install busGal_api
 
 There are quick examples for both the submodules mentioned above in their `__main__.py` and their docs.
 
-### Transport
-
-```python
-.. include:: busGal_api/transport/__main__.py
-```
-
 ## ⚠️ Disclaimer
 
 This project is not endorsed by, directly affiliated with, maintained
