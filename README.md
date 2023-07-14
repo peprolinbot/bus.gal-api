@@ -1,5 +1,9 @@
 # bus.gal-api 🚍
 
+
+<img src="logo.svg" alt="bus.gal-telegram" width=200/>
+
+
 [![GitHub license](https://img.shields.io/github/license/peprolinbot/bus.gal-api)](https://github.com/peprolinbot/bus.gal-api)
 
 [![PyPI version](https://img.shields.io/pypi/v/busGal-api?label=pypi%20package)](https://pypi.org/project/busGal-api)
