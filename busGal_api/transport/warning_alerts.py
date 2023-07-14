@@ -45,7 +45,7 @@ class WarningAlert():
 
         self.important = important
         """
-        Wheter the warning is classified as important
+        Whether the warning is classified as important
         """
 
     def __repr__(self):
@@ -78,7 +78,7 @@ def search_warnings(line_id: int = None, active: bool = True, date: date = date.
 
     :param line_id: The line id to check
 
-    :param active: Wether to fetch the active warnings, which is the default, or the non-active ones
+    :param active: Whether to fetch the active warnings, which is the default, or the non-active ones
 
     :param date: The date for which you want to check the warnings. Defaults to tomorrow
     """

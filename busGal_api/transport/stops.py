@@ -63,12 +63,12 @@ class Stop():
 
         self.on_demand = bool(on_demand)
         """
-        Wether the stop works on demand
+        Whether the stop works on demand
         """
 
         self.school_integration = bool(school_integration)
         """
-        Wether the stop has school integration
+        Whether the stop has school integration
         """
 
         self.ordinal = ordinal
@@ -216,7 +216,7 @@ def get_stop_name(stop_id: int, alternative: bool = True) -> str:
     """
     Fetch the name of a stop. **WARNING**: The API seems to have deprecated this somehow; altough I got it to work when trying random ids with `15004`, but the returned name is wrong; therefore I made a hacky alternative to fetch a stop's name, based on `busGal_api.transport.trips.get_expeditions_from_stop`
 
-    :param alternative: Wether to use the alternative, hacky, but working ;) method (it does by default)
+    :param alternative: Whether to use the alternative, hacky, but working ;) method (it does by default)
     """
 
     if alternative:
