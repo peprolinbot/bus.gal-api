@@ -1,4 +1,4 @@
-from . import rest_adapter
+from . import _rest_adapter
 
 
 ## vvv Classes vvv ##
@@ -126,7 +126,7 @@ def search_operators(query: str, num_results: int = 2147483647) -> list[Operator
     :param num_results: Number of results to return. Defaults to the maximum integer value the API would accept, a.k.a. the maximum positive value for a 32-bit signed binary integer (Wikipedia), a.k.a. 2,147,483,647
     """
 
-    data = rest_adapter.get("/operators/autocomplete",
+    data = _rest_adapter.get("/operators/autocomplete",
                             ep_params={"text": query,
                                        "numresults": num_results})
 
@@ -140,7 +140,7 @@ def get_all_operators() -> list[Operator]:
     Gets all the existing operators
     """
 
-    data = rest_adapter.get("/operators/autocomplete",
+    data = _rest_adapter.get("/operators/autocomplete",
                             ep_params={"text": '',  # The API doesn't respond for some reason if the text argument isn't given
                                        "show_all": True})
 
@@ -158,7 +158,7 @@ def search_contracts(operator_id: int = None, provincial_service: int = None) ->
     :param provincial_service: A provincial service id
     """
 
-    data = rest_adapter.get("/operators/contracts",
+    data = _rest_adapter.get("/operators/contracts",
                             ep_params={"operator_id": operator_id,
                                        "provincial_service": provincial_service})
 
@@ -184,7 +184,7 @@ def get_operator(operator_id: int) -> Operator:
     :param operator_id: The the operator id to fetch the data for
     """
 
-    return _parse_operator(rest_adapter.get("/operators/get",
+    return _parse_operator(_rest_adapter.get("/operators/get",
                                             ep_params={"operator_id": operator_id,
                                                        "operator_type": "operator"}))  # Turns out the API doesn't give a damn about which type you specify, but you can't just skip it
 

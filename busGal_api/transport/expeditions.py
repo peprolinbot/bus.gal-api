@@ -1,4 +1,4 @@
-from . import rest_adapter
+from . import _rest_adapter
 
 from .stops import Stop
 from .lines import Line
@@ -248,7 +248,7 @@ def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: b
     """
 
     # Timestamps are multiplied by 1000 because the API wants miliseconds
-    data = rest_adapter.get("/service/search",
+    data = _rest_adapter.get("/service/search",
                             ep_params={'origin_id': origin.id,
                                        'origin_type': origin.type,
                                        'destination_id': destination.id,
@@ -273,7 +273,7 @@ def get_expedition(expedition_id: int) -> Expedition:
     :param expedition_id: The expedition id
     """
 
-    data = rest_adapter.get("/service/detail",
+    data = _rest_adapter.get("/service/detail",
                             ep_params={"id": expedition_id})
 
     return _parse_expedition(data)
@@ -288,7 +288,7 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Ex
     :param datetime: The date and time for the trip
     """
 
-    data = rest_adapter.get("/public/expedition/from",
+    data = _rest_adapter.get("/public/expedition/from",
                             ep_params={"stopId": stop_id,
                                        "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")})
 

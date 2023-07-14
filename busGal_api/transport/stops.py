@@ -1,4 +1,4 @@
-from . import rest_adapter
+from . import _rest_adapter
 
 from datetime import datetime
 
@@ -168,7 +168,7 @@ def search_stops(query: str, councils: bool = True, num_results: int = 214748364
     else:
         endpoint = "/busstops/autocomplete-only-busstops"
 
-    return _parse_stop_search_results(rest_adapter.get(endpoint,
+    return _parse_stop_search_results(_rest_adapter.get(endpoint,
                                                        ep_params={"text": query,
                                                                   "num_results": num_results}))
 
@@ -187,7 +187,7 @@ def get_all_councils() -> list[Stop]:
     """
     Gets all the existing councils
     """
-    return _parse_stop_search_results(rest_adapter.get("/municipalities"))
+    return _parse_stop_search_results(_rest_adapter.get("/municipalities"))
 
 
 def location_search_stops(location: Location = None, lat: float = None, long: float = None, radius=5) -> list[Stop]:
@@ -206,7 +206,7 @@ def location_search_stops(location: Location = None, lat: float = None, long: fl
             raise TypeError(
                 "location_search_stops expected either the location or both the lat and long arguments")
 
-    return _parse_stop_search_results(rest_adapter.get("/busstops/in-range",
+    return _parse_stop_search_results(_rest_adapter.get("/busstops/in-range",
                                                        ep_params={"latitude": lat,
                                                                   "longitude": long,
                                                                   "range": radius}))
@@ -220,13 +220,13 @@ def get_stop_name(stop_id: int, alternative: bool = True) -> str:
     """
 
     if alternative:
-        data = rest_adapter.get("/public/expedition/from",
+        data = _rest_adapter.get("/public/expedition/from",
                                 ep_params={"stopId": stop_id,
                                            "tripDate": datetime.now().strftime("%d/%m/%Y %H:%M")})
 
         return data[0]["stop_name"]
 
-    return rest_adapter.get("/busstops/get",
+    return _rest_adapter.get("/busstops/get",
                             ep_params={"stop_id": stop_id})
 
 
@@ -235,7 +235,7 @@ def get_stop_location(stop_id: int) -> Location:
     Fetch the location of a stop. **WARNING**: The API seems to have deprecated this. Same problem as `get_stop_name`
     """
 
-    data = rest_adapter.get("/busstops/busstop-location",
+    data = _rest_adapter.get("/busstops/busstop-location",
                             ep_params={"id": stop_id})
 
     return Location(data["latitude"], data["longitude"])

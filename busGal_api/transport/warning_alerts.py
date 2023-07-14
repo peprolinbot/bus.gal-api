@@ -1,4 +1,4 @@
-from . import rest_adapter
+from . import _rest_adapter
 
 from .lines import Line, _parse_line
 
@@ -83,7 +83,7 @@ def search_warnings(line_id: int = None, active: bool = True, date: date = date.
     :param date: The date for which you want to check the warnings. Defaults to tomorrow
     """
 
-    data = rest_adapter.get("/warning/public/get-by-line",
+    data = _rest_adapter.get("/warning/public/get-by-line",
                             ep_params={"line_id": line_id,
                                        "active": active,
                                        "date": date.strftime("%d/%m/%Y") if date else None})
@@ -96,7 +96,7 @@ def get_important_warnings() -> list[WarningAlert]:
     Returns all the important warnings
     """
 
-    data = rest_adapter.get("/warning/public/get-important")
+    data = _rest_adapter.get("/warning/public/get-important")
 
     return [_parse_warning(el) for el in data]
 

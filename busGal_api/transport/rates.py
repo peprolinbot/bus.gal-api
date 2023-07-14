@@ -1,4 +1,4 @@
-from . import rest_adapter
+from . import _rest_adapter
 
 from datetime import date
 
@@ -82,7 +82,7 @@ def get_rate(origin_id: int, destination_id: int, expedition_id: int, date: date
     Fetches the rate of an expedition, including special rates
     """
 
-    return _parse_rate(rest_adapter.get("/rate/search",
+    return _parse_rate(_rest_adapter.get("/rate/search",
                                         ep_params={"origin_id": origin_id,
                                                    "destination_id": destination_id,
                                                    "expedition_id": expedition_id,

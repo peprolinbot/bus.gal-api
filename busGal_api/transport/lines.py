@@ -1,4 +1,4 @@
-from . import rest_adapter
+from . import _rest_adapter
 from .stops import Stop
 
 
@@ -89,7 +89,7 @@ def search_lines_from_stop(stop_id: int, page_number: int = 1, page_size: int = 
     :param page_size: Number of results per page. Defaults to the maximum integer value the API would accept, a.k.a. the maximum positive value for a 32-bit signed binary integer (Wikipedia), a.k.a. 2,147,483,647
     """
 
-    data = rest_adapter.get("/lines/search",
+    data = _rest_adapter.get("/lines/search",
                             ep_params={"stop_id": stop_id,
                                        "page_number": page_number,
                                        "page_size": page_size})
@@ -103,7 +103,7 @@ def concession_search_lines(operator_id: int = None, contract_code: str = None, 
     Get lines filtering by operator, contract and provincial service id
     """
 
-    data = rest_adapter.get("/lines",
+    data = _rest_adapter.get("/lines",
                             ep_params={"operator_id": operator_id,
                                        "contract_code": contract_code,
                                        "provincial_service": provincial_service})
@@ -128,7 +128,7 @@ def get_line(line_id: int) -> Line:
     but I'm tired and I don't want to play that game
     """
 
-    return _parse_line(rest_adapter.get("/lines/private/get",
+    return _parse_line(_rest_adapter.get("/lines/private/get",
                                         ep_params={"line_id": line_id}))
 
 ## ^^^ Methods ^^^ ##
