@@ -30,7 +30,6 @@ class Stop():
     A bus stop (municipalities are also considered stops)
     """
 
-    # Everything but the id is optional, because of the inconsistent output trough endpoints
     def __init__(self, id: int, type: str, name: str = None, group_type: int = None, location: Location = None, lat: float = None, long: float = None, on_demand: bool = None, school_integration: bool = None, ordinal: int = None, bus_stop_id: int = None, bus_stop_code: str = None, sitme_id: int = None, town_name: str = None, time: datetime = None):
         self.id = id
         """

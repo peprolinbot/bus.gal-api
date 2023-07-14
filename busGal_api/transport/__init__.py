@@ -7,7 +7,7 @@ rest_adapter = RestAdapter(BASE_URL)
 from . import lines
 from . import stops
 from . import operators
-from . import trips
+from . import expeditions
 from . import warning_alerts
 
-__all__ = ["lines", "stops", "operators", "trips", "warning_alerts"]
+__all__ = ["lines", "stops", "operators", "expeditions", "warning_alerts", "rates"]

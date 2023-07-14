@@ -4,42 +4,13 @@ from .stops import Stop
 from .lines import Line
 from .operators import Operator, Contract, _parse_operator
 from .warning_alerts import WarningAlert, _parse_warning
+from .rates import SpecialRate
 
 from datetime import date, datetime
 from time import mktime
 
 
 ## vvv Classes vvv ##
-
-class SpecialRate():
-    """
-    A special rate (a discount)
-    """
-
-    def __init__(self, id: int, text: str, type_id: int, type_name: str):
-        self.id = id
-        """
-        The special rate id
-        """
-
-        self.text = text
-        """
-        The text of the discount
-        """
-
-        self.type_id = type_id
-        """
-        The id of the type of discount
-        """
-
-        self.type_name = type_name
-        """
-        The name of the type of discount
-        """
-
-    def __repr__(self):
-        return f"{self.type_name}: {self.text}"
-
 
 class Route():
     """
@@ -66,7 +37,7 @@ class Expedition():
     An expedition
     """
 
-    def __init__(self, id: int, name: str, origin: Stop, destination: Stop, line: Line, operator: Operator, week_frequency: str, anual_frequency: str, on_demand: bool, school_integration: bool, code: str = None, passing_stop: Stop = None, passing_time: datetime = None, contract: Contract = None, warnings: list[WarningAlert] = None, special_rates: list[SpecialRate] = None, route: Route = None, direction: str = None, school_seats: int = None, on_demand_seats: int = None, reservable_seats: int = None, duration: int = None, bus_stops: list[Stop] = None):
+    def __init__(self, id: int, name: str, origin: Stop, destination: Stop, line: Line, operator: Operator, week_frequency: str, anual_frequency: str, on_demand: bool, school_integration: bool, code: str = None, passing_stop: Stop = None, passing_time: datetime = None, contract: Contract = None, warnings: list[WarningAlert] = None, special_rates: list[SpecialRate] = None, route: Route = None, direction: str = None, school_seats: int = None, on_demand_seats: int = None, reservable_seats: int = None, duration: int = None, bus_stops: list[Stop] = None, polyline: dict = None):
 
         self.id = id
         """
@@ -173,7 +144,7 @@ class Expedition():
         The amount of seats that are reservable
         """
 
-        self.duration =duration
+        self.duration = duration
         """
         Duration of the expedition
         """
@@ -181,6 +152,11 @@ class Expedition():
         self.bus_stops = bus_stops
         """
         The stops the expedition goes trough. Only given in `get_expedition_details`
+        """
+
+        self.polyline = polyline
+        """
+        It represents stops the expedition goes trough in a special format. Only given in `get_expedition_details`
         """
 
         self.bos_dot_gal_url = f"https://www.bus.gal/gl/service/expedition/{self.id}/nojs?ori={self.origin.bus_stop_id}&des={self.destination.bus_stop_id}&date={self.origin.time.strftime('%Y-%m-%d')}"
@@ -195,6 +171,56 @@ class Expedition():
 
 
 ## vvv Methods vvv ##
+
+def _parse_stop(data: dict) -> Stop:
+    # Only busstops are posible
+    return Stop(id=data["id"],
+                type="busstop",
+                name=data["busstop"],
+                bus_stop_id=data["bus_stop_id"],
+                bus_stop_code=data.get("bus_stop_code"),
+                on_demand=data["on_demand"],
+                school_integration=data["school_integration"],
+                ordinal=data["ordinal"],
+                lat=data.get("latitude"),
+                long=data.get("longitude"),
+                time=datetime.strptime(data["time"], "%H:%M"))
+
+
+def _parse_expedition(data: dict) -> Expedition:
+    return Expedition(id=data["id"],
+                      name=data["expedition_name"],
+                      origin=_parse_stop(data["origin"]),
+                      destination=_parse_stop(data["destination"]),
+                      line=Line(id=data.get("line_id"),
+                                name=data.get("line_name"),
+                                code=data.get("line_code")),
+                      operator=Operator(id=data["operator_id"],
+                                        name=data["operator"],
+                                        emails=data.get("emails")),
+                      week_frequency=data.get("week_frequency"),
+                      anual_frequency=data.get("anual_frequency"),
+                      on_demand=data.get("on_demand"),
+                      school_integration=data.get("school_integration"),
+                      code=data.get("expedition_code"),
+                      warnings=[_parse_warning(
+                          w) for w in data["warnings"]] if data.get("warnings") else None,
+                      special_rates=[_parse_special_rate(
+                          sr) for sr in data["special_rates"]] if data.get("special_rates") else None,
+                      contract=Contract(
+                          code=data.get("contract_code"),
+                          name=data.get("contract_name")) if data.get("contract_code") or data.get("contract_name") else None,
+                      route=Route(code=data.get("route_code"),
+                                  name=data.get("route_name")) if data.get(
+                          "route_name") or data.get("route_code") else None,
+                      duration=data.get("duration"),
+                      school_seats=data.get("school_seats"),
+                      on_demand_seats=data.get("ondemand_seats"),
+                      reservable_seats=data.get("reservable_seats"),
+                      bus_stops=[_parse_stop(s) for s in data["busstops"]] if data.get(
+                          "busstops") else None,
+                      polyline=data.get("saepolyline"))
+
 
 def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: bool = None, operator: Operator = None, expedition_id: int = None, page_number: int = 1, page_size: int = 0, departure_time: datetime = None, discount_id: int = None) -> list[Expedition]:
     """
@@ -237,52 +263,20 @@ def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: b
                                        'departure_time': departure_time.timestamp()*1000 if departure_time else None,
                                        'discount_id': discount_id})
 
-    def _parse_stop(data: dict) -> Stop:
-        # Only busstops are posible
-        return Stop(id=data["id"],
-                    type="busstop",
-                    name=data["busstop"],
-                    bus_stop_id=data["bus_stop_id"],
-                    bus_stop_code=data.get("bus_stop_code"),
-                    on_demand=data["on_demand"],
-                    school_integration=data["school_integration"],
-                    ordinal=data["ordinal"],
-                    time=datetime.strptime(data["time"], "%H:%M"))
-
-    def _parse_special_rate(data: dict) -> SpecialRate:
-        return SpecialRate(id=data["special_rate_id"],
-                           text=data["special_rate_text"],
-                           type_id=data["special_rate_type_id"],
-                           type_name=data["special_rate_type_name"])
-
-    def _parse_expedition(data: dict) -> Expedition:
-        return Expedition(id=data["id"],
-                          name=data["expedition_name"],
-                          origin=_parse_stop(data["origin"]),
-                          destination=_parse_stop(data["destination"]),
-                          line=Line(id=data.get("line_id"),
-                                    name=data.get("line_name"),
-                                    code=data.get("line_code")),
-                          operator=Operator(id=data["operator_id"],
-                                            name=data["operator"]),
-                          week_frequency=data.get("week_frequency"),
-                          anual_frequency=data.get("week_frequency"),
-                          on_demand=data.get("on_demand"),
-                          school_integration=data.get(
-                              "school_integration"),
-                          code=data.get("expedition_code"),
-                          warnings=[_parse_warning(
-                              w) for w in data["warnings"]] if data.get("warnings") else None,
-                          special_rates=[_parse_special_rate(
-                              sr) for sr in data["special_rates"]] if data.get("special_rates") else None,
-                          contract=Contract(
-                              code=data.get("contract_code"),
-                              name=data.get("contract_name")) if data.get("contract_code") or data.get("contract_name") else None,
-                          route=Route(code=data.get("route_code"),
-                                      name=data.get("route_name")) if data.get(
-                              "route_name") or data.get("route_code") else None)
-
     return [_parse_expedition(el) for el in data]
+
+
+def get_expedition(expedition_id: int) -> Expedition:
+    """
+    Obtains the details of an expedition.
+
+    :param expedition_id: The expedition id
+    """
+
+    data = rest_adapter.get("/service/detail",
+                            ep_params={"id": expedition_id})
+
+    return _parse_expedition(data)
 
 
 def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Expedition]:
@@ -335,60 +329,4 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Ex
 
     return [_parse_expedition(el) for el in data]
 
-
-def get_expedition_details(expedition_id: int) -> list[Expedition]:
-    """
-    Obtains the details of an expedition
-
-    :param expedition_id: The expedition id
-    """
-
-    data = rest_adapter.get("/service/detail",
-                            ep_params={"id": expedition_id})
-
-    def _parse_stop(data: dict) -> Stop:
-        # Only busstops are posible
-        return Stop(id=data["id"],
-                    type="busstop",
-                    name=data["busstop"],
-                    bus_stop_id=data["bus_stop_id"],
-                    bus_stop_code=data.get("bus_stop_code"),
-                    on_demand=data["on_demand"],
-                    school_integration=data["school_integration"],
-                    ordinal=data["ordinal"],
-                    lat=data.get("latitude"),
-                    long=data.get("longitude"),
-                    time=datetime.strptime(data["time"], "%H:%M"))
-
-
-    return Expedition(id=data["id"],
-                      name=data["expedition_name"],
-                      origin=_parse_stop(data["origin"]),
-                      destination=_parse_stop(data["destination"]),
-                      line=Line(id=data.get("line_id"),
-                                name=data.get("line_name"),
-                                code=data.get("line_code")),
-                      operator=Operator(id=data["operator_id"],
-                                        name=data["operator"],
-                                        emails=data.get("emails")),
-                      week_frequency=data.get("week_frequency"),
-                      anual_frequency=data.get("week_frequency"),
-                      on_demand=data.get("on_demand"),
-                      school_integration=data.get(
-                          "school_integration"),
-                      code=data.get("expedition_code"),
-                      warnings=[_parse_warning(
-                          w) for w in data["warnings"]] if data.get("warnings") else None,
-                      special_rates=[_parse_special_rate(
-                          sr) for sr in data["special_rates"]] if data.get("special_rates") else None,
-                      contract=Contract(
-                          code=data.get("contract_code"),
-                          name=data.get("contract_name")) if data.get("contract_code") or data.get("contract_name") else None,
-                      route=Route(code=data.get("route_code"),
-                                  name=data.get("route_name")) if data.get(
-                          "route_name") or data.get("route_code") else None,
-                      duration=data.get("duration"),
-                      school_seats=data.get("school_seats"),
-                      on_demand_seats=data.get("ondemand_seats"),
-                      reservable_seats=data.get("reservable_seats"),
-                      bus_stops=[_parse_stop(s) for s in data.get("busstops")])
+## ^^^ Methods ^^^ ##
