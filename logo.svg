@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="emoji"
+   viewBox="0 0 48 51"
+   version="1.1"
+   sodipodi:docname="1F68D.svg"
+   width="48"
+   height="51"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <defs
+     id="defs51" />
+  <sodipodi:namedview
+     id="namedview49"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6.5555556"
+     inkscape:cx="26.084746"
+     inkscape:cy="21.966102"
+     inkscape:window-width="1900"
+     inkscape:window-height="1001"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="emoji" />
+  <g
+     id="color"
+     transform="translate(-12,-9.9583)">
+    <rect
+       x="27.6889"
+       y="10.9583"
+       rx="2.4704001"
+       ry="2.4704001"
+       width="16.9457"
+       height="4.9408002"
+       fill="#fcea2b"
+       id="rect2" />
+    <path
+       fill="#fcea2b"
+       d="M 24.23,13.9583 H 47.7695 A 7.2305,7.2305 0 0 1 55,21.1888 v 26.2695 a 1.5,1.5 0 0 1 -1.5,1.5 h -35 a 1.5,1.5 0 0 1 -1.5,-1.5 v -26.27 a 7.23,7.23 0 0 1 7.23,-7.23 z"
+       id="path4" />
+    <rect
+       x="17"
+       y="38.958302"
+       width="38"
+       height="10"
+       fill="#f4aa41"
+       id="rect6" />
+    <rect
+       x="20"
+       y="20.9583"
+       width="31"
+       height="13"
+       fill="#92d3f5"
+       id="rect8" />
+    <rect
+       x="20"
+       y="41.958302"
+       width="7"
+       height="3"
+       fill="#ffffff"
+       id="rect10" />
+    <rect
+       x="44"
+       y="41.958302"
+       width="7"
+       height="3"
+       fill="#ffffff"
+       id="rect12" />
+    <rect
+       x="16"
+       y="48.958302"
+       rx="2.6210999"
+       ry="2.6210999"
+       width="40"
+       height="8"
+       fill="#3f3f3f"
+       id="rect14" />
+    <rect
+       x="30.044399"
+       y="13.2175"
+       rx="1.4333"
+       ry="1.4333"
+       width="10.9112"
+       height="2.8664999"
+       fill="#3f3f3f"
+       id="rect16" />
+  </g>
+  <g
+     id="line"
+     transform="translate(-12,-9.9583)">
+    <rect
+       x="16"
+       y="48.958302"
+       rx="2.6210999"
+       ry="2.6210999"
+       width="40"
+       height="8"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       id="rect19" />
+    <rect
+       x="18"
+       y="56.958302"
+       rx="2"
+       ry="2"
+       width="6"
+       height="4"
+       id="rect21" />
+    <rect
+       x="48"
+       y="56.958302"
+       rx="2"
+       ry="2"
+       width="6"
+       height="4"
+       id="rect23" />
+    <line
+       x1="16"
+       x2="13"
+       y1="25.9583"
+       y2="25.9583"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       id="line25" />
+    <line
+       x1="13"
+       x2="13"
+       y1="22.9583"
+       y2="28.9583"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       id="line27" />
+    <line
+       x1="56"
+       x2="59"
+       y1="25.9583"
+       y2="25.9583"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       id="line29" />
+    <line
+       x1="59"
+       x2="59"
+       y1="22.9583"
+       y2="28.9583"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       id="line31" />
+    <path
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       d="M 44.1556,13.9583 H 47.77 A 7.2518,7.2518 0 0 1 55,21.1888 v 26.27 a 1.5044,1.5044 0 0 1 -1.5,1.5 h -35 a 1.5044,1.5044 0 0 1 -1.5,-1.5 v -26.27 a 7.2515,7.2515 0 0 1 7.23,-7.23 h 2.6142"
+       id="path33" />
+    <path
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       d="m 51,21.9583 v 11.8 H 21"
+       id="path35" />
+    <polyline
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       points="21 44.958 27 44.958 27 42.958"
+       id="polyline37" />
+    <polyline
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       points="45 44.958 51 44.958 51 42.958"
+       id="polyline39" />
+    <line
+       x1="32"
+       x2="41"
+       y1="41.958302"
+       y2="41.958302"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-miterlimit="10"
+       stroke-width="2"
+       id="line41" />
+    <line
+       x1="32"
+       x2="41"
+       y1="44.958302"
+       y2="44.958302"
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-miterlimit="10"
+       stroke-width="2"
+       id="line43" />
+    <path
+       fill="none"
+       stroke="#000000"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2"
+       d="m 26.8444,13.9583 v -0.4791 a 2.5283,2.5283 0 0 1 2.5209,-2.5209 h 12.2694 a 2.5283,2.5283 0 0 1 2.5209,2.5209 v 0.4791"
+       id="path45" />
+  </g>
+  <xhtml:iframe
+     class="cleanslate hidden"
+     src="1F68D_files/commandline.html"
+     id="cmdline_iframe"
+     loading="lazy"
+     style="height: 0px !important;" />
+</svg>
