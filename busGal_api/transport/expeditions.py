@@ -222,7 +222,7 @@ def _parse_expedition(data: dict) -> Expedition:
                       polyline=data.get("saepolyline"))
 
 
-def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: bool = None, operator: Operator = None, expedition_id: int = None, page_number: int = 1, page_size: int = 0, departure_time: datetime = None, discount_id: int = None) -> list[Expedition]:
+def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: bool = None, operator: Operator = None, expedition_id: int = None, page_number: int = 1, page_size: int = 2147483647, departure_time: datetime = None, discount_id: int = None) -> list[Expedition]:
     """
     Obtains all the expeditions from the app API. Called on creation
 
@@ -240,7 +240,7 @@ def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: b
 
     :param page_number: The number of the page to return
 
-    :param page_size: How many expeditions to return per page. If set to 0 (the default) pagination is disabled
+    :param page_size: How many expeditions to return per page. The default is the maximum integer the api would accept (2147483647)
 
     :param departure_time: The time at wich the trip should start
 
