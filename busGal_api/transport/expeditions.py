@@ -159,7 +159,7 @@ class Expedition():
         It represents stops the expedition goes trough in a special format. Only given in `get_expedition_details`
         """
 
-        self.bos_dot_gal_url = f"https://www.bus.gal/gl/service/expedition/{self.id}/nojs?ori={self.origin.bus_stop_id}&des={self.destination.bus_stop_id}&date={self.origin.time.strftime('%Y-%m-%d')}"
+        self.bus_dot_gal_url = f"https://www.bus.gal/gl/service/expedition/{self.id}/nojs?ori={self.origin.bus_stop_id}&des={self.destination.bus_stop_id}&date={self.origin.time.strftime('%Y-%m-%d')}"
         """
         Url on bus.gal for the expedition's details page. Shows it's itinerary and looks good, so I put it in here
         """
