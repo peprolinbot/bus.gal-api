@@ -211,9 +211,9 @@ class Account():
         :params months: How many months to get `summary_movements` for
         """
 
-        data = self.rest_adapter.get("/cards/get",
-                                     ep_params={"months": months,
-                                                "number": number})
+        data = self.rest_adapter.post("/cards/get",
+                                     data={"months": months,
+                                           "number": number})
 
         return _parse_card(data, self)
 
