@@ -14,4 +14,4 @@ from . import exceptions
 from . import known_servers
 
 
-__all__ = ["transport", "accounts"]
+__all__ = ["transport", "accounts", "exceptions"]

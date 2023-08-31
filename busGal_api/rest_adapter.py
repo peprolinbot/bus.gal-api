@@ -2,7 +2,7 @@ import requests
 from json import JSONDecodeError
 import logging
 
-from .exceptions import TPGalWSException, TPGalWSBlankResponse
+from .exceptions import *
 
 
 class RestAdapter():
@@ -56,16 +56,14 @@ class RestAdapter():
                 method=http_method, url=full_url, headers=headers, params=ep_params, json=data)
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
-            raise TPGalWSException("Request failed") from e
+            raise e
 
         try:
             data_out = response.json()
         except (ValueError, JSONDecodeError) as e:
             if response.content == b'':
-                raise TPGalWSBlankResponse(
-                    f"The API errored silently || HTTP {response.status_code}: {response.reason}") from e
-            raise TPGalWSException(
-                f"Bad JSON in response || HTTP {response.status_code}: {response.reason}") from e
+                raise TPGalWSBlankResponse(response) from e
+            raise TPGalWSBadJsonException(response) from e
 
         is_success = 299 >= response.status_code >= 200  # 200 to 299 is OK
         log_line = log_line_post.format(
@@ -74,8 +72,7 @@ class RestAdapter():
             self._logger.debug(msg=log_line)
             return data_out.get("results")
         self._logger.error(msg=log_line)
-        raise TPGalWSException(
-            f"HTTP --> {response.status_code}: {response.reason} || App --> {data_out.get('code')}: {data_out.get('message')}")
+        raise TPGalWSAppException(response)
 
     def get(self, endpoint: str, ep_params: dict = None) -> dict:
         """
