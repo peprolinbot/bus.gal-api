@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.1.0.2' 
+VERSION = '0.1.0.3' 
 DESCRIPTION = 'Python API wrapper for the galician public transport'
 with open("README.md", "r", encoding="utf-8") as fh:
     LONG_DESCRIPTION = fh.read()
