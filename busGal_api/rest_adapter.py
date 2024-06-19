@@ -1,6 +1,7 @@
 import requests
 from json import JSONDecodeError
 import logging
+from typing import Callable
 
 from .exceptions import *
 
@@ -16,15 +17,21 @@ class RestAdapter():
     :param token_type: The said token's type. In my tests it's always been `Bearer`, so that's the default
 
     :param logger: If your app has a logger, pass it in here
+
+    :param authentication_function: A Callable which must return the token to be used. It will be called when 401 occurs to set the token to its returned value and try again the request
+
+    :param max_auth_recursion_level: The maximum number of times an authentication using `authentication_function` can be tried
     """
 
-    def __init__(self, url: str, token: str = None, token_type: str = "Bearer", logger: logging.Logger = None):
+    def __init__(self, url: str, token: str = None, token_type: str = "Bearer", logger: logging.Logger = None, authentication_function: Callable = None, max_auth_recursion_level: int = 1):
         self.url = url
         self.token = token
         self.token_type = token_type
         self._logger = logger or logging.getLogger(__name__)
+        self._authentication_function = authentication_function
+        self.max_auth_recursion_level = max_auth_recursion_level
 
-    def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None) -> dict:
+    def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None, _auth_recursion_level: int = 0) -> dict:
         """
         Make an HTTP request
 
@@ -44,9 +51,8 @@ class RestAdapter():
 
         def _escape_dict(data: dict) -> str:
             return str(data).replace("{", "{{").replace("}", "}}")
-            
+
         log_line_pre = f"method={http_method}, url={full_url}, params={_escape_dict(ep_params)}, data={_escape_dict(data)}"
-        print(log_line_pre)
         log_line_post = ', '.join(
             (log_line_pre, "success={}, status_code={}, message={}"))
 
@@ -57,6 +63,11 @@ class RestAdapter():
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=(str(e)))
             raise e
+
+        if response.status_code == 401 and self._authentication_function and (_auth_recursion_level < self.max_auth_recursion_level):
+            self.token = self._authentication_function()
+            self._logger.debug(msg="Retrying request after authentication")
+            return self._do(http_method, endpoint, ep_params, data, _auth_recursion_level+1)
 
         try:
             data_out = response.json()
@@ -70,7 +81,11 @@ class RestAdapter():
             is_success, response.status_code, response.reason)
         if is_success:
             self._logger.debug(msg=log_line)
-            return data_out.get("results")
+            try:
+                # In XenteNovaQr the results key doesn't exist
+                return data_out.get("results") or data_out
+            except AttributeError:
+                return data_out  # For XenteNovaQR Account.get_qrs(), the API returns a list
         self._logger.error(msg=log_line)
         raise TPGalWSAppException(response)
 
@@ -87,3 +102,10 @@ class RestAdapter():
         """
 
         return self._do(http_method='POST', endpoint=endpoint, ep_params=ep_params, data=data)
+
+    def patch(self, endpoint: str, ep_params: dict = None, data: dict = None) -> dict:
+        """
+        Make an HTTP PATCH request
+        """
+
+        return self._do(http_method='PATCH', endpoint=endpoint, ep_params=ep_params, data=data)

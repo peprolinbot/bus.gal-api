@@ -33,3 +33,5 @@ by, sponsored by or in any way officially related with la Xunta de
 Galicia, the bus operators or any of the companies involved in the
 [bus.gal](https://www.bus.gal/) website and the
 [app](https://play.google.com/store/apps/details?id=gal.xunta.transportepublico).
+
+This software is provided 'as is' without any warranty of any kind. The user of this software assumes all responsibility and risk for its use. I shall not be liable for any damages or misuse of this software. Please use the code and information in this repo responsibly.
