@@ -18,7 +18,7 @@ setup(
     url="https://github.com/peprolinbot/bus.gal-api",
     project_urls={
         "Bug Tracker": "https://github.com/peprolinbot/bus.gal-api/issues",
-        "Documentation": "https://busgal-api.readthedocs.io/en/latest/",
+        "Documentation": "https://peprolinbot.github.io/bus.gal-api",
     },
     keywords=['bus', 'buses', 'transport',
               'public transport', 'galicia', 'api'],
