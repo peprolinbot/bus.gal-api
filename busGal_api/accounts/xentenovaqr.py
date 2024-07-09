@@ -4,6 +4,7 @@ from ..exceptions import TPGalWSBadJsonException, TPGalWSAppException
 from .qrutils import create_qr as _create_qr
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
+import textwrap
 
 
 _rest_adapter = RestAdapter(BASE_URL)
@@ -260,12 +261,12 @@ def register_account(name: str, birth_date: date, email: str, identity_number: s
                        data={
                            "birthDate": birth_date.strftime("%Y-%m-%d"),
                            "email": email,
-                           "frontIdentityDocumentPhoto": identity_front_img,
+                           "frontIdentityDocumentPhoto": textwrap.fill(identity_front_img, 76)+"\n",
                            "idAccountExternalApp": external_user_id,
                            "idDevice": device_id,
                            "idProductList": [],
                            "identityDocumentNumber": identity_number,
                            "name": name,
-                           "rearIdentityDocumentPhoto": identity_rear_img,
+                           "rearIdentityDocumentPhoto": textwrap.fill(identity_rear_img, 76)+"\n",
                            "surname": ""
                        })
