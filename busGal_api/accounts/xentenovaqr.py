@@ -243,7 +243,7 @@ class Account():
         return self.email
 
 
-def register_account(name: str, birth_date: date, email: str, identity_number: str, identity_front_img: str, identity_rear_img: str, external_user_id: int, device_id: int) -> None:
+def register_account(name: str, birth_date: date, email: str, identity_number: str, identity_front_img: str, identity_rear_img: str, external_user_id: int, device_id: str) -> None:
     """
     Register an user account. You need a normal TPGAL account first. Keep in mind that, in the app, OCR is used for the verification process, so please don't use this to skip their measures and do not abuse the service.
 
