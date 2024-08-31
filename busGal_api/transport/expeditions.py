@@ -4,7 +4,7 @@ from .stops import Stop
 from .lines import Line
 from .operators import Operator, Contract, _parse_operator
 from .warning_alerts import WarningAlert, _parse_warning
-from .rates import SpecialRate
+from .rates import SpecialRate, _parse_special_rate
 
 from datetime import date, datetime
 from time import mktime
@@ -249,19 +249,19 @@ def search_expeditions(origin: Stop, destination: Stop, date: date, on_demand: b
 
     # Timestamps are multiplied by 1000 because the API wants miliseconds
     data = _rest_adapter.get("/service/search",
-                            ep_params={'origin_id': origin.id,
-                                       'origin_type': origin.type,
-                                       'destination_id': destination.id,
-                                       'destination_type': destination.type,
-                                       'date': int(mktime(date.timetuple())) * 1000,
-                                       'type_service': int(on_demand)+1 if on_demand else None,
-                                       'operator_id': operator.id if operator else None,
-                                       'operator_id': operator.type if operator else None,
-                                       'expedition_id': expedition_id,
-                                       'page_number': page_number,
-                                       'page_size': page_size,
-                                       'departure_time': departure_time.timestamp()*1000 if departure_time else None,
-                                       'discount_id': discount_id})
+                             ep_params={'origin_id': origin.id,
+                                        'origin_type': origin.type,
+                                        'destination_id': destination.id,
+                                        'destination_type': destination.type,
+                                        'date': int(mktime(date.timetuple())) * 1000,
+                                        'type_service': int(on_demand)+1 if on_demand else None,
+                                        'operator_id': operator.id if operator else None,
+                                        'operator_id': operator.type if operator else None,
+                                        'expedition_id': expedition_id,
+                                        'page_number': page_number,
+                                        'page_size': page_size,
+                                        'departure_time': departure_time.timestamp()*1000 if departure_time else None,
+                                        'discount_id': discount_id})
 
     return [_parse_expedition(el) for el in data]
 
@@ -274,7 +274,7 @@ def get_expedition(expedition_id: int) -> Expedition:
     """
 
     data = _rest_adapter.get("/service/detail",
-                            ep_params={"id": expedition_id})
+                             ep_params={"id": expedition_id})
 
     return _parse_expedition(data)
 
@@ -289,8 +289,8 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Ex
     """
 
     data = _rest_adapter.get("/public/expedition/from",
-                            ep_params={"stopId": stop_id,
-                                       "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")})
+                             ep_params={"stopId": stop_id,
+                                        "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")})
 
     def _parse_stop(data: dict) -> Stop:
         # Only busstops are posible
