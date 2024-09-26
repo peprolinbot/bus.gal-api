@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.2.1.0'
+VERSION = '0.2.1.1'
 DESCRIPTION = 'Python API wrapper for the galician public transport'
 with open("README.md", "r", encoding="utf-8") as fh:
     LONG_DESCRIPTION = fh.read()
@@ -14,7 +14,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
     install_requires=["requests>=2.25.1",
-                      "python-dateutil>=2.9.0.post0", "pycryptodome>=3.20.0"],
+                      "python-dateutil>=2.9.0.post0", "pycryptodome>=3.20.0","lxml==5.3.0"],
     url="https://github.com/peprolinbot/bus.gal-api",
     project_urls={
         "Bug Tracker": "https://github.com/peprolinbot/bus.gal-api/issues",
