@@ -11,12 +11,11 @@ _rest_adapter = RestAdapter(BASE_URL)
 
 
 def _authentication_function():
-    try:
-        _rest_adapter.post("/LoginApp/authenticate",
-                           data={"username": "apixnv",
-                                 "password": "*jhFUhDiAurAls&jsuEJsPcbAsae*"})  # This is hardcoded into the app
-    except TPGalWSBadJsonException as e:  # This will always happen, it's not such an ugly workaround
-        return e.response.text
+    response = _rest_adapter.post("/LoginApp/authenticate",
+                                  data={"username": "apixnv",
+                                        "password": "*jhFUhDiAurAls&jsuEJsPcbAsae*"}, load_json=False)  # This is hardcoded into the app
+
+    return response.text
 
 
 # Here tokens actually expire after some time, unlike in the TPGAL accounts
