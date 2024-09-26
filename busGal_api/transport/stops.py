@@ -88,7 +88,7 @@ class Stop():
 
         self.sitme_id = sitme_id
         """
-        Given in `location_search_stops`
+        Given in `location_search_stops`. Used for real-time
         """
 
         self.town_name = town_name
@@ -169,8 +169,8 @@ def search_stops(query: str, councils: bool = True, num_results: int = 214748364
         endpoint = "/busstops/autocomplete-only-busstops"
 
     return _parse_stop_search_results(_rest_adapter.get(endpoint,
-                                                       ep_params={"text": query,
-                                                                  "num_results": num_results}))
+                                                        ep_params={"text": query,
+                                                                   "num_results": num_results}))
 
 
 def get_all_stops(councils: bool = True) -> list[Stop]:
@@ -207,9 +207,9 @@ def location_search_stops(location: Location = None, lat: float = None, long: fl
                 "location_search_stops() expected either the 'location' or both the 'lat' and 'long' arguments")
 
     return _parse_stop_search_results(_rest_adapter.get("/busstops/in-range",
-                                                       ep_params={"latitude": lat,
-                                                                  "longitude": long,
-                                                                  "range": radius}))
+                                                        ep_params={"latitude": lat,
+                                                                   "longitude": long,
+                                                                   "range": radius}))
 
 
 def get_stop_name(stop_id: int, alternative: bool = True) -> str:
@@ -221,13 +221,13 @@ def get_stop_name(stop_id: int, alternative: bool = True) -> str:
 
     if alternative:
         data = _rest_adapter.get("/public/expedition/from",
-                                ep_params={"stopId": stop_id,
-                                           "tripDate": datetime.now().strftime("%d/%m/%Y %H:%M")})
+                                 ep_params={"stopId": stop_id,
+                                            "tripDate": datetime.now().strftime("%d/%m/%Y %H:%M")})
 
         return data[0]["stop_name"]
 
     return _rest_adapter.get("/busstops/get",
-                            ep_params={"stop_id": stop_id})
+                             ep_params={"stop_id": stop_id})
 
 
 def get_stop_location(stop_id: int) -> Location:
@@ -236,7 +236,7 @@ def get_stop_location(stop_id: int) -> Location:
     """
 
     data = _rest_adapter.get("/busstops/busstop-location",
-                            ep_params={"id": stop_id})
+                             ep_params={"id": stop_id})
 
     return Location(data["latitude"], data["longitude"])
 
