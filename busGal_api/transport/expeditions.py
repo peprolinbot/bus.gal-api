@@ -5,9 +5,12 @@ from .lines import Line
 from .operators import Operator, Contract, _parse_operator
 from .warning_alerts import WarningAlert, _parse_warning
 from .rates import SpecialRate, _parse_special_rate
+from ..known_servers import XG_REALTIME_APP
 
 from datetime import date, datetime
 from time import mktime
+import requests
+import lxml.etree as ET
 
 
 ## vvv Classes vvv ##
@@ -37,7 +40,7 @@ class Expedition():
     An expedition
     """
 
-    def __init__(self, id: int, name: str, origin: Stop, destination: Stop, line: Line, operator: Operator, week_frequency: str, anual_frequency: str, on_demand: bool, school_integration: bool, code: str = None, passing_stop: Stop = None, passing_time: datetime = None, contract: Contract = None, warnings: list[WarningAlert] = None, special_rates: list[SpecialRate] = None, route: Route = None, direction: str = None, school_seats: int = None, on_demand_seats: int = None, reservable_seats: int = None, duration: int = None, bus_stops: list[Stop] = None, polyline: dict = None):
+    def __init__(self, id: int, name: str, origin: Stop, destination: Stop, line: Line, operator: Operator, week_frequency: str, anual_frequency: str, on_demand: bool, school_integration: bool, code: str = None, passing_stop: Stop = None, passing_time: datetime = None, contract: Contract = None, warnings: list[WarningAlert] = None, special_rates: list[SpecialRate] = None, route: Route = None, direction: str = None, school_seats: int = None, on_demand_seats: int = None, reservable_seats: int = None, duration: int = None, bus_stops: list[Stop] = None, polyline: dict = None, sitme_id: int = None, real_time_data: dict = None):
 
         self.id = id
         """
@@ -164,6 +167,16 @@ class Expedition():
         Url on bus.gal for the expedition's details page. Shows it's itinerary and looks good, so I put it in here
         """
 
+        self.sitme_id = sitme_id
+        """
+        Used for real-time
+        """
+
+        self.real_time_data = real_time_data
+        """
+        Real-time data for the expedition, obtained from SIRI, parsed into a dictionary
+        """
+
     def __repr__(self):
         return f"{self.origin}  |  {self.origin.time.strftime('%H:%M')}  --->  {self.destination}  |  {self.destination.time.strftime('%H:%M')}"
 
@@ -279,18 +292,129 @@ def get_expedition(expedition_id: int) -> Expedition:
     return _parse_expedition(data)
 
 
-def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Expedition]:
+def real_time_from_stop(stop_sitme_id: int, date: datetime = None):
+    """
+    Will call the XUNTA's SIRI StopMonitoring, like the app does, and return information in a dict whose keys are the `CourseOfJourneyRef` of each expedition, for example:
+    ```     
+    {
+        103715: {
+            "LineRef": 8774,
+            "DirectionRef": 11,
+            "RouteRef": 11,
+            "PublishedLineName": "HOSPITAL NAVAL - PORTO",
+            "DirectionName": "Hospital Naval - Porto",
+            "OperatorRef": "XG642",
+            "OriginRef": 12710,
+            "OriginName": "Hospital Naval",
+            "OriginShortName": "Hospital N",
+            "DestinationRef": 38869,
+            "DestinationName": "PORTO",
+            "DestinationShortName": "PORTO",
+            "Monitored": "true",
+            "VehicleLocation": {
+                "Latitude": "43.5139808654785",
+                "Longitude": "-8.21154975891113",
+            },
+            "Bearing": 0,
+            "Velocity": 0,
+            "Delay": "PT0M",
+            "CourseOfJourneyRef": 103715,
+            "VehicleRef": "9441LHL",
+            "MonitoredCall": {
+                "StopPointRef": 20,
+                "VisitNumber": 24,
+                "StopPointName": "Praza De Galicia",
+                "AimedArrivalTime": "2024-09-26T17:26:00",
+                "ExpectedArrivalTime": "0001-01-01T00:00:00+01:00",
+                "AimedDepartureTime": "2024-09-26T17:26:00",
+                "ExpectedDepartureTime": "0001-01-01T00:00:00+01:00",
+                "DistanceFromStop": "0 m",
+            },
+        }
+        # Truncated)
+    }
+    ```
+
+    :param stop_sitme_id: The stop's sitme_id attribute
+    :param date: What to send as request timestamp. Current date&time by default
+    """
+
+    request_timestamp = (date or datetime.now()).strftime('%Y-%m-%dT%H:%M:%S')
+    payload = f"""
+        <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/" xmlns:siri="http://www.siri.org.uk/siri">
+          <soap:Header/>
+          <soap:Body>
+            <tem:GetStopMonitoring>
+              <tem:request>
+                <ServiceRequestInfo>
+                  <siri:RequestTimestamp>{request_timestamp}</siri:RequestTimestamp>
+                  <siri:AccountId>app-tpgal</siri:AccountId>
+                  <siri:AccountKey>_*tpgal*_</siri:AccountKey>
+                </ServiceRequestInfo>
+                <Request version="2.0">
+                  <siri:RequestTimestamp>{request_timestamp}</siri:RequestTimestamp>
+                  <siri:MonitoringRef>{stop_sitme_id}</siri:MonitoringRef>
+                </Request>
+              </tem:request>
+            </tem:GetStopMonitoring>
+          </soap:Body>
+        </soap:Envelope>
+    """
+
+    headers = {
+        'Content-Type': 'text/xml',
+        'soapaction': 'http://tempuri.org/GetStopMonitoring'
+    }
+
+    response = requests.request(
+        "POST", f"{XG_REALTIME_APP}/SiriHubWs.asmx", headers=headers, data=payload)
+
+    def element_to_dict(element):
+        result = {}
+
+        for child in element:
+            tag_name = ET.QName(child.tag).localname
+
+            # If the child has children, call the function recursively
+            if len(child) > 0:
+                result[tag_name] = element_to_dict(child)
+            else:
+                result[tag_name] = int(
+                    child.text) if child.text.isdigit() else child.text
+
+        return result
+
+    root = ET.fromstring(bytes(response.text, encoding='utf-8'))
+
+    expeditions = {}
+    for descendant in root.iter("{http://www.siri.org.uk/siri}MonitoredVehicleJourney"):
+        elem_dict = element_to_dict(descendant)
+        expeditions[elem_dict["CourseOfJourneyRef"]] = elem_dict
+
+    return expeditions
+
+
+def get_expeditions_from_stop(stop_id: int, departure_time: datetime, real_time: bool = False) -> list[Expedition]:
     """
     Based on a stop id, obtains all the expeditions that go through it
 
     :param stop_id: The stop id
 
     :param datetime: The date and time for the trip
+
+    :param real_time: Whether to query real-time information
     """
 
     data = _rest_adapter.get("/public/expedition/from",
+                             load_json=False,
                              ep_params={"stopId": stop_id,
-                                        "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")})
+                                        "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")}).json()
+
+    if real_time:
+        real_time_data_all = real_time_from_stop(
+            data["id_sitme"])  # Includes all the expeditions
+
+    results = data["results"]
 
     def _parse_stop(data: dict) -> Stop:
         # Only busstops are posible
@@ -306,6 +430,7 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Ex
 
     def _parse_expedition(data: dict) -> Expedition:
         return Expedition(id=data["expedition_id"],
+                          sitme_id=data["expedition_sitme_id"],
                           name=data["expedition_name"],
                           origin=_parse_stop(data["origin_line_stop"]),
                           destination=_parse_stop(
@@ -325,8 +450,9 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime) -> list[Ex
                                             name=data.get("stop_name")),
                           passing_time=datetime.strptime(
                               data["passing_time"], "%H:%M"),
-                          direction=data.get("direction"))
+                          direction=data.get("direction"),
+                          real_time_data=real_time_data_all.get(data["expedition_sitme_id"]) if real_time else None)
 
-    return [_parse_expedition(el) for el in data]
+    return [_parse_expedition(el) for el in results]
 
 ## ^^^ Methods ^^^ ##
