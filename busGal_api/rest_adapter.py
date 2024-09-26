@@ -31,7 +31,7 @@ class RestAdapter():
         self._authentication_function = authentication_function
         self.max_auth_recursion_level = max_auth_recursion_level
 
-    def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None, _auth_recursion_level: int = 0) -> dict:
+    def _do(self, http_method: str, endpoint: str, ep_params: dict = None, data: dict = None, load_json: bool = True, results_only: bool = True, _auth_recursion_level: int = 0) -> dict:
         """
         Make an HTTP request
 
@@ -68,13 +68,16 @@ class RestAdapter():
             self.token = self._authentication_function()
             self._logger.debug(msg="Retrying request after authentication")
             return self._do(http_method, endpoint, ep_params, data, _auth_recursion_level+1)
-
-        try:
-            data_out = response.json()
-        except (ValueError, JSONDecodeError) as e:
-            if response.content == b'':
-                raise TPGalWSBlankResponse(response) from e
-            raise TPGalWSBadJsonException(response) from e
+        if load_json:
+            try:
+                data_out = response.json()
+            except (ValueError, JSONDecodeError) as e:
+                if response.content == b'':
+                    raise TPGalWSBlankResponse(response) from e
+                raise TPGalWSBadJsonException(response) from e
+        else:
+            data_out = response
+            results_only = False  # It is not a dict, so it wouldn't work
 
         is_success = 299 >= response.status_code >= 200  # 200 to 299 is OK
         log_line = log_line_post.format(
@@ -83,29 +86,29 @@ class RestAdapter():
             self._logger.debug(msg=log_line)
             try:
                 # In XenteNovaQr the results key doesn't exist
-                return data_out.get("results") or data_out
+                return data_out.get("results", data_out) if results_only else data_out
             except AttributeError:
                 return data_out  # For XenteNovaQR Account.get_qrs(), the API returns a list
         self._logger.error(msg=log_line)
         raise TPGalWSAppException(response)
 
-    def get(self, endpoint: str, ep_params: dict = None) -> dict:
+    def get(self, endpoint: str, ep_params: dict = None, **kwargs) -> dict:
         """
         Make an HTTP GET request
         """
 
-        return self._do(http_method='GET', endpoint=endpoint, ep_params=ep_params)
+        return self._do(http_method='GET', endpoint=endpoint, ep_params=ep_params, **kwargs)
 
-    def post(self, endpoint: str, ep_params: dict = None, data: dict = None) -> dict:
+    def post(self, endpoint: str, ep_params: dict = None, data: dict = None, **kwargs) -> dict:
         """
         Make an HTTP POST request
         """
 
-        return self._do(http_method='POST', endpoint=endpoint, ep_params=ep_params, data=data)
+        return self._do(http_method='POST', endpoint=endpoint, ep_params=ep_params, data=data, **kwargs)
 
-    def patch(self, endpoint: str, ep_params: dict = None, data: dict = None) -> dict:
+    def patch(self, endpoint: str, ep_params: dict = None, data: dict = None, **kwargs) -> dict:
         """
         Make an HTTP PATCH request
         """
 
-        return self._do(http_method='PATCH', endpoint=endpoint, ep_params=ep_params, data=data)
+        return self._do(http_method='PATCH', endpoint=endpoint, ep_params=ep_params, data=data, **kwargs)
