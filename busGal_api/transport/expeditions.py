@@ -379,17 +379,20 @@ def real_time_from_stop(stop_sitme_id: int, date: datetime = None):
             if len(child) > 0:
                 result[tag_name] = element_to_dict(child)
             else:
-                result[tag_name] = int(
-                    child.text) if child.text.isdigit() else child.text
+                try:
+                    result[tag_name] = int(
+                        child.text)
+                except (ValueError, TypeError):
+                    result[tag_name] = child.text
 
         return result
 
     root = ET.fromstring(bytes(response.text, encoding='utf-8'))
 
     expeditions = {}
-    for descendant in root.iter("{http://www.siri.org.uk/siri}MonitoredVehicleJourney"):
-        elem_dict = element_to_dict(descendant)
-        expeditions[elem_dict["CourseOfJourneyRef"]] = elem_dict
+    for journey in root.iter("{http://www.siri.org.uk/siri}MonitoredVehicleJourney"):
+        journey_data = element_to_dict(journey)
+        expeditions[journey_data["CourseOfJourneyRef"]] = journey_data
 
     return expeditions
 
