@@ -295,7 +295,7 @@ def get_expedition(expedition_id: int) -> Expedition:
 def real_time_from_stop(stop_sitme_id: int, date: datetime = None):
     """
     Will call the XUNTA's SIRI StopMonitoring, like the app does, and return information in a dict whose keys are the `CourseOfJourneyRef` of each expedition, for example:
-    ```     
+    ```
     {
         103715: {
             "LineRef": 8774,
@@ -419,8 +419,8 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime, real_time:
                         type="busstop",
                         name=data.get("text"),
                         sitme_id=data.get("id_sitme"),
-                        lat=data.get("location")["latitude"],
-                        long=data.get("location")["longitude"])
+                        lat=data.get("location", {}).get('latitude'),
+                        long=data.get("location", {}).get('longitude'))
 
     if real_time:
         real_time_data_all = real_time_from_stop(
