@@ -397,7 +397,7 @@ def real_time_from_stop(stop_sitme_id: int, date: datetime = None):
     return expeditions
 
 
-def get_expeditions_from_stop(stop_id: int, departure_time: datetime, real_time: bool = False) -> list[Expedition]:
+def get_expeditions_from_stop(stop_id: int, departure_time: datetime, real_time: bool = False) -> (Stop, list[Expedition]):
     """
     Based on a stop id, obtains all the expeditions that go through it
 
@@ -406,16 +406,25 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime, real_time:
     :param datetime: The date and time for the trip
 
     :param real_time: Whether to query real-time information
+
+    :returns: The queried stop (only basic details) and expeditions from it
     """
 
     data = _rest_adapter.get("/public/expedition/from",
-                             load_json=False,
+                             results_only=False,
                              ep_params={"stopId": stop_id,
-                                        "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")}).json()
+                                        "tripDate": departure_time.strftime("%d/%m/%Y %H:%M")})
+
+    queried_stop = Stop(id=data["id"],
+                        type="busstop",
+                        name=data.get("text"),
+                        sitme_id=data.get("id_sitme"),
+                        lat=data.get("location")["latitude"],
+                        long=data.get("location")["longitude"])
 
     if real_time:
         real_time_data_all = real_time_from_stop(
-            data["id_sitme"])  # Includes all the expeditions
+            queried_stop.sitme_id)  # Includes all the expeditions
 
     results = data["results"]
 
@@ -456,6 +465,6 @@ def get_expeditions_from_stop(stop_id: int, departure_time: datetime, real_time:
                           direction=data.get("direction"),
                           real_time_data=real_time_data_all.get(data["expedition_sitme_id"]) if real_time else None)
 
-    return [_parse_expedition(el) for el in results]
+    return queried_stop, [_parse_expedition(el) for el in results]
 
 ## ^^^ Methods ^^^ ##
