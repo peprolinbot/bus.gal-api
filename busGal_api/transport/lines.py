@@ -1,6 +1,8 @@
 from . import _rest_adapter
 from .stops import Stop
 
+from fuzzywuzzy import fuzz
+
 
 ## vvv Classes vvv ##
 
@@ -130,5 +132,17 @@ def get_line(line_id: int) -> Line:
 
     return _parse_line(_rest_adapter.get("/lines/private/get",
                                         ep_params={"line_id": line_id}))
+
+def find_line(keywords: str) -> list[Line]:
+    """
+    Get lines whose name match with the given keywords using a fuzzy search
+    """
+    result_query = get_all_lines()
+    result = []
+
+    for line in result_query:
+        if fuzz.partial_ratio(keywords.lower(), line.name.lower()) > 95: 
+            result.append(line)
+    return result
 
 ## ^^^ Methods ^^^ ##

@@ -3,3 +3,4 @@ pdoc==14.5.1
 python-dateutil==2.9.0.post0
 pycryptodome==3.20.0
 lxml==5.3.0
+fuzzywuzzy==0.18.0
