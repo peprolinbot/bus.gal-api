@@ -135,9 +135,9 @@ def get_line(line_id: int) -> Line:
 
 def find_line(keywords: str) -> list[Line]:
     """
-    Get lines whose name match with the given keywords
+    Get lines whose name match with the given keywords using a fuzzy search
     """
-    result_query = concession_search_lines()
+    result_query = get_all_lines()
     result = []
 
     for line in result_query:
