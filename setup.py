@@ -14,7 +14,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
     install_requires=["requests>=2.25.1",
-                      "python-dateutil>=2.9.0.post0", "pycryptodome>=3.20.0","lxml==5.3.0"],
+                      "python-dateutil>=2.9.0.post0", "pycryptodome>=3.20.0","lxml==5.3.1"],
     url="https://github.com/peprolinbot/bus.gal-api",
     project_urls={
         "Bug Tracker": "https://github.com/peprolinbot/bus.gal-api/issues",
